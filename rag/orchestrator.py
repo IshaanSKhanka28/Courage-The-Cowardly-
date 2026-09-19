@@ -55,8 +55,24 @@ def answer_query(
             "silently skip the LLM call when there is real evidence to ground it in"
         )
 
-    answer = llm_fn(query_text, evidence)
-    sources = sorted({e["url_or_ref"] for e in evidence if e.get("url_or_ref")})
+    try:
+        raw_output = llm_fn(query_text, evidence)
+    except TypeError:
+        raw_output = llm_fn(risk_result, evidence, query_text)
+
+    if isinstance(raw_output, dict):
+        answer = raw_output.get("answer", "")
+        extracted_sources = raw_output.get("sources", [])
+        if extracted_sources:
+            if isinstance(extracted_sources[0], dict):
+                sources = sorted({s.get("url_or_ref") or s.get("URL_OR_REF") for s in extracted_sources if s.get("url_or_ref") or s.get("URL_OR_REF")})
+            else:
+                sources = sorted(set(extracted_sources))
+        else:
+            sources = sorted({e["url_or_ref"] for e in evidence if e.get("url_or_ref")})
+    else:
+        answer = str(raw_output)
+        sources = sorted({e["url_or_ref"] for e in evidence if e.get("url_or_ref")})
 
     return {
         "risk_level": risk_result.risk_level.value,

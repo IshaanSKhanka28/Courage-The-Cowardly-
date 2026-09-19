@@ -24,15 +24,15 @@ DEFAULT_N_RESULTS = 5
 
 
 def _city_clause(city: str) -> dict:
-    return {"city": {"$in": [city, *CITY_WILDCARDS]}}
+    return {"CITY": {"$in": [city, *CITY_WILDCARDS]}}
 
 
 def _build_local_where(sector: str, state: str, city: str | None) -> dict:
     """Strict filter: state must exactly match (no National fallback). Used
     only to check whether any *local* evidence exists for this location."""
     clauses = [
-        {"sector": {"$eq": sector}},
-        {"state": {"$eq": state}},
+        {"SECTOR": {"$eq": sector}},
+        {"STATE": {"$eq": state}},
     ]
     if city:
         clauses.append(_city_clause(city))
@@ -41,8 +41,8 @@ def _build_local_where(sector: str, state: str, city: str | None) -> dict:
 
 def _build_where(sector: str, state: str, city: str | None) -> dict:
     clauses = [
-        {"sector": {"$eq": sector}},
-        {"$or": [{"state": {"$eq": state}}, {"state": {"$eq": NATIONAL_STATE}}]},
+        {"SECTOR": {"$eq": sector}},
+        {"$or": [{"STATE": {"$eq": state}}, {"STATE": {"$eq": NATIONAL_STATE}}]},
     ]
     if city:
         clauses.append(_city_clause(city))
@@ -52,16 +52,17 @@ def _build_where(sector: str, state: str, city: str | None) -> dict:
 def _format_metadatas_and_documents(ids, documents, metadatas) -> list[dict]:
     results = []
     for doc_id, document, metadata in zip(ids, documents, metadatas):
+        metadata = metadata or {}
         results.append({
             "id": doc_id,
             "text": document,
-            "source": metadata.get("source"),
-            "type": metadata.get("type"),
-            "sector": metadata.get("sector"),
-            "state": metadata.get("state"),
-            "city": metadata.get("city"),
-            "url_or_ref": metadata.get("url_or_ref"),
-            "file_path": metadata.get("file_path"),
+            "source": metadata.get("SOURCE", metadata.get("source")),
+            "type": metadata.get("TYPE", metadata.get("type")),
+            "sector": metadata.get("SECTOR", metadata.get("sector")),
+            "state": metadata.get("STATE", metadata.get("state")),
+            "city": metadata.get("CITY", metadata.get("city")),
+            "url_or_ref": metadata.get("URL_OR_REF", metadata.get("url_or_ref")),
+            "file_path": metadata.get("source_file", metadata.get("file_path")),
         })
     return results
 
@@ -96,3 +97,4 @@ def retrieve(
     return _format_metadatas_and_documents(
         result["ids"][0], result["documents"][0], result["metadatas"][0]
     )
+

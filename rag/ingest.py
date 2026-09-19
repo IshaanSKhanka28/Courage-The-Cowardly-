@@ -88,13 +88,14 @@ def build_collection(docs_dir: str, client, embedding_function=None, collection_
             ids.append(f"{file_path}::chunk{i}")
             documents.append(chunk)
             metadatas.append({
-                "source": doc.source,
-                "type": doc.type,
-                "sector": doc.sector,
-                "state": doc.state,
-                "city": doc.city,
-                "url_or_ref": doc.url_or_ref,
+                "SOURCE": doc.source,
+                "TYPE": doc.type,
+                "SECTOR": doc.sector,
+                "STATE": doc.state,
+                "CITY": doc.city,
+                "URL_OR_REF": doc.url_or_ref,
                 "file_path": doc.file_path,
+                "source_file": doc.file_path,
                 "chunk_index": i,
             })
 
