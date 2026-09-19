@@ -1,0 +1,22 @@
+export default function AboutPage() {
+  return (
+    <div className="max-w-3xl w-full mx-auto p-6 space-y-6">
+      <h1 className="text-2xl font-bold tracking-tight">About Nimit</h1>
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4 text-slate-300 text-sm leading-relaxed">
+        <p>
+          India’s standard weather applications provide generic numbers like temperature and rainfall depth, leaving users to guess the real-world consequences. General LLMs try to bridge this gap, but they hallucinate dangerous life-or-death details.
+        </p>
+        <h3 className="font-semibold text-slate-100 text-base pt-2">Our Architecture</h3>
+        <p>
+          Nimit solves this by decoupling risk logic from natural language generation:
+        </p>
+        <ul className="list-disc pl-5 space-y-2 text-slate-400">
+          <li><strong className="text-slate-200">Weather API (Fact):</strong> Pulls live data via Open-Meteo.</li>
+          <li><strong className="text-slate-200">Deterministic Rule Engine:</strong> Pure Python code evaluating official thresholds (IMD rainfall categories, heat index equations) with zero LLM guesswork.</li>
+          <li><strong className="text-slate-200">RAG Retrieval (Chroma):</strong> Pulls exact municipal drainage and public health PDF chunks.</li>
+          <li><strong className="text-slate-200">Citation Verifier:</strong> Strips unsupported claims before rendering the final conversational response.</li>
+        </ul>
+      </div>
+    </div>
+  );
+}

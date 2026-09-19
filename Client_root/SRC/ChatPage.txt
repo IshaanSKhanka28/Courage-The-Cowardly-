@@ -1,0 +1,104 @@
+import { useState } from 'react';
+import { Send, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
+
+export default function ChatPage() {
+  const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState(null);
+  const [showTrace, setShowTrace] = useState(false);
+
+  const handlePresetClick = (presetText) => {
+    setQuery(presetText);
+  };
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    if (!query.trim()) return;
+    setLoading(true);
+    setResponse(null);
+
+    // Simulate API fetch delay (Replace with real backend fetch later)
+    setTimeout(() => {
+      setResponse({
+        answer: "Yeah, I'd avoid it. Mumbai's looking at heavy rain tomorrow morning — around 42mm between 6 and 10am — and Andheri Subway is one of the spots that's flooded three separate times last monsoon whenever rainfall crossed this range.",
+        sources: ["BMC Drainage Report 2024", "IMD Mumbai bulletin"],
+        trace: {
+          forecast: "42mm rainfall (Open-Meteo API)",
+          ruleEngine: "Heavy Rain category + Known Flood Zone escalation -> SEVERE risk",
+          ragEvidence: "Matched chunk: 'Andheri subway waterlogging threshold > 35mm triggers immediate high alert.'"
+        }
+      });
+      setLoading(false);
+    }, 1000);
+  };
+
+  return (
+    <div className="max-w-3xl w-full mx-auto p-6 flex flex-col flex-1 justify-between">
+      <div className="space-y-6 my-auto">
+        {!response && !loading && (
+          <div className="text-center space-y-3 py-12">
+            <h1 className="text-3xl font-extrabold tracking-tight">What can I help you check?</h1>
+            <p className="text-slate-400 text-sm">Ask about commute flooding or heatwave safety grounded in official guidelines.</p>
+            <div className="flex flex-wrap justify-center gap-2 pt-4">
+              <button onClick={() => handlePresetClick("Will my commute via the Andheri Subway in Mumbai be flooded tomorrow morning?")} className="text-xs bg-slate-900 border border-slate-800 hover:border-indigo-500/50 px-3 py-2 rounded-lg transition text-slate-300">
+                🌧️ Andheri Subway Flooding
+              </button>
+              <button onClick={() => handlePresetClick("Is tomorrow's Delhi heat safe for outdoor children's sports?")} className="text-xs bg-slate-900 border border-slate-800 hover:border-indigo-500/50 px-3 py-2 rounded-lg transition text-slate-300">
+                ☀️ Delhi Heat Safety
+              </button>
+            </div>
+          </div>
+        )}
+
+        {loading && (
+          <div className="text-center py-12 text-slate-400 animate-pulse flex items-center justify-center gap-2">
+            <Sparkles className="w-5 h-5 text-indigo-400" /> Checking weather models and official advisories...
+          </div>
+        )}
+
+        {response && (
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4 shadow-xl">
+            <div className="text-slate-200 leading-relaxed text-base">
+              "{response.answer}"
+            </div>
+            
+            <div className="text-xs text-slate-400 border-t border-slate-800 pt-3 flex items-center justify-between">
+              <span>Sources: {response.sources.join(', ')}</span>
+              <button 
+                onClick={() => setShowTrace(!showTrace)} 
+                className="flex items-center gap-1 text-indigo-400 hover:underline font-medium"
+              >
+                Why? {showTrace ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </button>
+            </div>
+
+            {showTrace && (
+              <div className="bg-slate-950 p-4 rounded-lg border border-slate-800/80 text-xs space-y-2 text-slate-300">
+                <div className="font-semibold text-indigo-400 mb-1">Deterministic Trace & Verification:</div>
+                <div>• <span className="text-slate-400">Fact (Forecast):</span> {response.trace.forecast}</div>
+                <div>• <span className="text-slate-400">Rule Engine:</span> {response.trace.ruleEngine}</div>
+                <div>• <span className="text-slate-400">RAG Evidence:</span> {response.trace.ragEvidence}</div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Input Form */}
+      <form onSubmit={handleSend} className="sticky bottom-6 pt-4 bg-slate-950">
+        <div className="relative flex items-center">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Ask a location-specific impact question..."
+            className="w-full bg-slate-900 border border-slate-800 rounded-xl py-4 pl-4 pr-12 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition shadow-lg"
+          />
+          <button type="submit" className="absolute right-3 bg-indigo-600 hover:bg-indigo-500 text-white p-2 rounded-lg transition">
+            <Send className="w-4 h-4" />
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
