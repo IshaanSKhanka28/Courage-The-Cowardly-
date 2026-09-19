@@ -43,8 +43,8 @@ class TestBuildCollection:
         assert sample["metadatas"], "expected at least one ingested chunk"
 
         all_chunks = collection.get(limit=1000)
-        states = {m["state"] for m in all_chunks["metadatas"]}
-        cities = {m["city"] for m in all_chunks["metadatas"]}
+        states = {m.get("STATE", m.get("state")) for m in all_chunks["metadatas"]}
+        cities = {m.get("CITY", m.get("city")) for m in all_chunks["metadatas"]}
 
         assert "Maharashtra" in states
         assert "Delhi" in states
@@ -60,5 +60,5 @@ class TestBuildCollection:
         )
         all_chunks = collection.get(limit=1000)
         for metadata in all_chunks["metadatas"]:
-            for key in ("source", "type", "sector", "state", "city", "url_or_ref", "file_path"):
-                assert metadata.get(key), f"missing {key} in {metadata}"
+            for key in ("SOURCE", "TYPE", "SECTOR", "STATE", "CITY", "URL_OR_REF", "file_path"):
+                assert metadata.get(key) or metadata.get(key.lower()), f"missing {key} in {metadata}"

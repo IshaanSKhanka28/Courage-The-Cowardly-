@@ -20,14 +20,14 @@ def collection():
             "Delhi heat wave advisory for vulnerable groups including children.",
         ],
         metadatas=[
-            {"sector": "traffic", "state": "Maharashtra", "city": "Mumbai",
-             "source": "s", "type": "news_secondary", "url_or_ref": "u1", "file_path": "f1"},
-            {"sector": "traffic", "state": "Karnataka", "city": "Bengaluru",
-             "source": "s", "type": "news_secondary", "url_or_ref": "u2", "file_path": "f2"},
-            {"sector": "traffic", "state": "National", "city": "ALL",
-             "source": "s", "type": "official_advisory", "url_or_ref": "u3", "file_path": "f3"},
-            {"sector": "health", "state": "Delhi", "city": "Delhi",
-             "source": "s", "type": "government_guideline", "url_or_ref": "u4", "file_path": "f4"},
+            {"SECTOR": "traffic", "STATE": "Maharashtra", "CITY": "Mumbai",
+             "SOURCE": "Mumbai Police", "TYPE": "news_secondary", "URL_OR_REF": "u1", "source_file": "f1"},
+            {"SECTOR": "traffic", "STATE": "Karnataka", "CITY": "Bengaluru",
+             "SOURCE": "BTP", "TYPE": "news_secondary", "URL_OR_REF": "u2", "source_file": "f2"},
+            {"SECTOR": "traffic", "STATE": "National", "CITY": "ALL",
+             "SOURCE": "IMD", "TYPE": "official_advisory", "URL_OR_REF": "u3", "source_file": "f3"},
+            {"SECTOR": "health", "STATE": "Delhi", "CITY": "Delhi",
+             "SOURCE": "DDMA", "TYPE": "government_guideline", "URL_OR_REF": "u4", "source_file": "f4"},
         ],
     )
     return coll
@@ -42,6 +42,15 @@ class TestRetrieveScoping:
         ids = {r["id"] for r in results}
         assert "mumbai_1" in ids
         assert "bengaluru_1" not in ids
+
+        # Explicitly assert that metadata fields are populated and not None
+        mumbai_doc = next(r for r in results if r["id"] == "mumbai_1")
+        assert mumbai_doc["source"] == "Mumbai Police"
+        assert mumbai_doc["type"] == "news_secondary"
+        assert mumbai_doc["state"] == "Maharashtra"
+        assert mumbai_doc["city"] == "Mumbai"
+        assert mumbai_doc["url_or_ref"] == "u1"
+        assert mumbai_doc["sector"] == "traffic"
 
     def test_bengaluru_query_excludes_mumbai_only_docs(self, collection):
         results = retrieve(
