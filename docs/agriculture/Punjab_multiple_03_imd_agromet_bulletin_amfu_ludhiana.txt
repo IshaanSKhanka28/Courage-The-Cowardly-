@@ -1,0 +1,24 @@
+SOURCE: India Meteorological Department (IMD), Meteorological Centre Chandigarh - "Agromet Advisory Service Bulletin for the State of Punjab"
+TYPE: official_advisory
+SECTOR: agriculture
+STATE: Punjab
+CITY: multiple
+URL_OR_REF: https://mausam.imd.gov.in/chandigarh/mcdata/agromet_pun.pdf (Bulletin No. 75/2026, issued 18.09.2026)
+---
+FLAGGED FOR MANUAL DECISION: this single official IMD bulletin explicitly covers BOTH Ludhiana and Amritsar (and 5 other districts: Tarn Taran, Kapurthala, Jalandhar, Fatehgarh Sahib, Patiala) together under one "AMFU Ludhiana" zone advisory. It is not filed separately under each city's bucket - see the curation summary for how this was handled.
+
+Note: This bulletin is issued live/periodically (this is bulletin #75 of 2026, issued 18 September 2026) and its crop coverage reflects the current kharif season (rice, maize, sugarcane, mustard sowing, groundnut, potato) rather than wheat, since wheat is a rabi/winter crop. It demonstrates a real, current, official district-linked IMD advisory channel for this region; for wheat-specific rain/lodging guidance see the PAU Package of Practices (Punjab_state-wide_01) and the district-specific ICAR Agriculture Contingency Plans.
+
+Header: "Agromet Advisory Service Bulletin for the State of PUNJAB (Advisories mentioned in the bulletin are prepared by different AMFUs and DAMUs in Punjab). Bulletin No. 75/2026. Issued on 18.09.2026."
+
+AMFU LUDHIANA (Amritsar, Taran Taran, Kapurthala, Jalandhar, Ludhiana, Fathegarh Sahib, Patiala):
+
+RICE (Heading): "Irrigate the paddy field two days after the ponded water has infiltrated into the soil and stop irrigation two weeks before maturity for easy harvesting and timely sowing of next rabi season crop. The rice fields showing more than 5 per cent dead hearts... due to stem borer attack, should be sprayed with recommended pesticides."
+
+MAIZE (Grain filling and Maturity): "Maintain adequate water supply particularly at tasseling and silking stages. Stress at these stages causes considerable losses in yield. Adjust irrigation as per weather."
+
+SUGARCANE (Grand Growth): "Weather is likely to remain favourable for prop up the sugarcane crop by using trash-twist method. Irrigate the crop at regular intervals for getting higher yields. Rogue out the canes affected by red rot and wilt."
+
+GENERAL ADVISORY (applies to all crops in this zone): "Farmers are advised to withhold irrigation in crops, vegetables, and orchards during next 4-5 days. Ensure proper drainage in fields to avoid waterlogging and promptly remove excess rainwater after showers. Application of fertilizers and plant protection chemicals recommended in crop-specific advisories should only be applied when weather become clear."
+
+Extended range forecast for Punjab (18-24 September 2026): "Rainfall likely to be below normal over the state during the period... Light to moderate rainfall likely at isolated places on 18th and 19th and weather likely to be dry thereafter in the state."

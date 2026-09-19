@@ -1,0 +1,28 @@
+SOURCE: National Disaster Management Authority (NDMA), Ministry of Home Affairs, Government of India
+TYPE: official_advisory
+SECTOR: health
+STATE: National
+CITY: ALL
+URL_OR_REF: https://ndma.gov.in/sites/default/files/PDF/Guidelines/heatwaveguidelines.pdf
+---
+Note: This PDF (62 pages) is a scanned/image-based document with no extractable text layer, so it could not be machine-excerpted from its body text. The title page and publication details below were confirmed by visually rendering and reading the PDF pages directly.
+
+Title page content:
+
+NATIONAL GUIDELINES FOR PREPARATION OF ACTION PLAN - PREVENTION AND MANAGEMENT OF HEAT WAVE
+
+October 2019
+
+NATIONAL DISASTER MANAGEMENT AUTHORITY
+MINISTRY OF HOME AFFAIRS
+GOVERNMENT OF INDIA
+
+A publication of:
+National Disaster Management Authority
+Ministry of Home Affairs
+Government of India
+NDMA Bhawan
+A-1, Safdarjung Enclave
+New Delhi - 110 029
+
+This is the same NDMA heat wave guidelines document referenced as a source by IMD's own Standard Operating Procedure for Weather Forecasting and Warning Services (see docs/health/02_imd_heatwave_criteria_vulnerable_groups.txt) and by the MoHFW/NCDC state health advisory (see docs/health/04_mohfw_ncdc_state_health_advisory_2026.txt), which cites it as: "Guidelines for preparation of action plan- prevention and management of heat wave, 2019. National Disaster Management Authority, Government of India."

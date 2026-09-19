@@ -1,0 +1,18 @@
+SOURCE: The Tribune (India)
+TYPE: news_secondary
+SECTOR: health
+STATE: Delhi
+CITY: Delhi
+URL_OR_REF: https://www.tribuneindia.com/news/delhi/doctors-warn-of-serious-health-risks-as-imd-issues-yellow-alert-amid-spiralling-temperature
+---
+Heat Alert: Delhi Faces Health Risks Amid Rising Temperatures
+
+Current Situation: Delhi recorded its first heatwave of the season, with temperatures reaching 40.2C. The India Meteorological Department issued a yellow alert (meaning "be aware") through Wednesday, advising residents to avoid heat exposure and wear light, loose cotton clothing.
+
+Health Risks Identified: Medical experts warn that extreme heat can trigger heatstroke when body temperature exceeds 104F. Dr. Mukesh Mehra, senior director at Max Super Speciality Hospital, noted symptoms include "confusion, dry and hot skin, rapid heartbeat, and even seizures."
+
+Range of Heat-Related Illnesses: Heat rash and muscle cramps from excessive sweating and electrolyte loss; heat exhaustion causing dizziness, fatigue, and nausea; heatstroke, a life-threatening emergency with potential organ damage.
+
+Vulnerable Populations: Children, elderly individuals, pregnant women, and those with pre-existing cardiac or kidney conditions face heightened risk. Diabetics are particularly susceptible to heatstroke complications.
+
+Medical Recommendations: Stay well-hydrated with non-caffeinated fluids; avoid peak sun hours (afternoon); wear breathable, light-coloured clothing; seek immediate medical attention for heat-related symptoms; avoid tea, coffee, and carbonated beverages.

@@ -1,0 +1,30 @@
+SOURCE: India Meteorological Department (IMD) - Standard Operating Procedure for Weather Forecasting and Warning Services, Chapter 7: Heat and Cold Wave Warning Services
+TYPE: official_advisory
+SECTOR: health
+STATE: National
+CITY: ALL
+URL_OR_REF: https://mausam.imd.gov.in/imd_latest/contents/pdf/forecasting_sop.pdf (Chapter 7, Sections 7.3.1 and Table 7.3, pp. 160-167)
+---
+7.3.1. Criterion for declaring heat wave
+
+Heat wave is considered if maximum temperature of a station reaches at least 40C or more for Plains and at least 30C or more for Hilly regions.
+
+Based on Departure from Normal:
+Heat Wave: Departure from normal is 4.5C to 6.4C
+Severe Heat Wave: Departure from normal is >6.4C
+
+Based on Actual Maximum Temperature:
+Heat Wave: When actual maximum temperature >= 45C
+Severe Heat Wave: When actual maximum temperature >= 47C
+
+If above criteria met at least in 2 stations in a Meteorological sub-division for at least two consecutive days, it is declared on the second day.
+
+Criterion for describing Heat Wave for coastal stations: When maximum temperature departure is 4.5C or more from normal, Heat Wave may be described provided actual maximum temperature is 37C or more.
+
+Table 7.3. Impact based colour coded alert & warning for heat wave (excerpt):
+
+Yellow Alert (Be updated) - Heat Alert - Heat wave conditions at isolated pockets persists on 2 days. Moderate temperature. "Heat is tolerable for general public but moderate health concern for vulnerable people e.g. infants, elderly, people with chronic diseases." Suggested actions: Avoid heat exposure; wear lightweight, light-coloured, loose, cotton clothes; cover your head with a cloth, hat or umbrella.
+
+Orange Alert (Be prepared) - Severe Heat Alert for the day - (i) Severe heat wave conditions persist for 2 days, (ii) heat wave persists for 4 days or more though not severe. High temperature. "Increased likelihood of heat illness symptoms in people who are either exposed to sun for a prolonged period or doing heavy work. High health concern for vulnerable people e.g. infants, elderly, people with chronic diseases." Suggested action: avoid heat exposure - keep [cool].
+
+Section 7.7.1 (Preventive measures for Heat Wave) also states: "Pregnant workers and workers with a medical condition should be given additional attention" (Source cited in the SOP: https://ndma.gov.in/images/guidelines/guidelines-heat-wave.pdf).

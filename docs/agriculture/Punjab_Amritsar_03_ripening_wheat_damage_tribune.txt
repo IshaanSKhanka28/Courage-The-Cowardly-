@@ -1,0 +1,23 @@
+SOURCE: The Tribune (India)
+TYPE: news_secondary
+SECTOR: agriculture
+STATE: Punjab
+CITY: Amritsar
+URL_OR_REF: https://www.tribuneindia.com/news/amritsar/sudden-weather-change-damages-ripening-wheat-crop-in-amritsar/
+---
+Wheat Crop Damage in Amritsar: Weather Event Summary
+
+Date & location: April 3, 2026, Amritsar, Punjab.
+
+Weather conditions: Unseasonal weather struck the region on Friday, featuring intermittent rain, hailstorms, and gusty winds beginning early morning and continuing intermittently through evening. The conditions brought temperature relief but caused substantial agricultural losses.
+
+Crop damage extent (wheat nearing harvest maturity):
+- Lodging: Strong winds caused wheat flattening in isolated areas.
+- Quality concerns: Farmers fear moisture and lodging will cause grain discoloration, darkening them and reducing market value.
+- Yield predictions: One farmer estimated losses of up to five quintals per acre, with expected harvest dropping from typical 23-24 quintals to potentially 17-18 quintals per acre.
+
+Contributing factors: Prior week rainfall had already waterlogged fields, weakening crop roots before this event. The timing proved particularly damaging since wheat stood "fully mature and ready for harvest."
+
+Farmer response: Ranjit Singh urged "the government to conduct a special girdawari and provide compensation for the losses incurred by farmers."
+
+Expert assessment: Agriculture specialists confirmed adverse harvest-season weather negatively impacts wheat productivity and grain quality, especially regarding lodging and excess moisture sensitivity.

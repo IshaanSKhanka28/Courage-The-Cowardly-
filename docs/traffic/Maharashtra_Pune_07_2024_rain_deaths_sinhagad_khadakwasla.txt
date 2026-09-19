@@ -1,0 +1,18 @@
+SOURCE: The Tribune (Tribune India)
+TYPE: news_secondary
+SECTOR: traffic
+STATE: Maharashtra
+CITY: Pune
+URL_OR_REF: https://www.tribuneindia.com/news/india/4-dead-in-rain-related-incidents-in-pune-low-lying-areas-inundated-people-being-evacuated-643209
+---
+Deaths and casualties: four people died in rain-related incidents in Pune on July 25, 2024. Three men died from electrocution in Deccan while attempting to move a submerged handcart used for selling egg dishes. One person died and another was injured in a landslide at Tahmini ghat in Mulshi tehsil.
+
+Affected areas: low-lying neighborhoods experienced severe flooding, including Sinhagad Road, Bavdhan, Baner, and Deccan Gymkhana. Additional inundation occurred in Velha, Mulshi, and Bhor talukas and dam catchment regions.
+
+Water management: the Khadakwasla Dam released water at 35,000 cusecs initially, later reduced to 15,000 cusecs. "Water has been released from the reservoir" due to heavy rainfall in catchment areas, according to district officials.
+
+Emergency response: Army teams were deployed at Ekta Nagar on Sinhagad Road; NDRF personnel were positioned at 18 locations; SDRF teams were stationed across multiple districts. Twenty-nine tourists stranded near Lonavala were evacuated on Wednesday evening.
+
+Weather alert: the India Meteorological Department issued a red alert for Pune district on July 25, 2024. Schools and colleges were closed as a precaution.
+
+Note: this article does not specify rainfall measurements in millimeters.

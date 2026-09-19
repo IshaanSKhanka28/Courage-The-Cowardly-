@@ -1,0 +1,22 @@
+SOURCE: New Kerala
+TYPE: news_secondary
+SECTOR: traffic
+STATE: Maharashtra
+CITY: Mumbai
+URL_OR_REF: https://www.newkerala.com/news/a/amid-heavy-rainfall-bmc-tells-mumbaikars-avoid-stepping-154.htm
+---
+Mumbai Heavy Rain Red Alert: BMC Advisory Summary
+Date: July 6, 2026
+Alert Level: Red Alert issued by Indian Meteorological Department
+
+Weather Conditions: Extremely heavy rainfall across Greater Mumbai region; wind speeds 80-90 km/h.
+
+BMC Official Statement: The civic body urged residents to "avoid stepping out of their homes unless necessary" and stated that "Your safety and vigilance are of utmost importance."
+
+Key Advisories: Maintain distance from trees, deteriorating structures, hoardings, and electrical poles. Do not park vehicles beneath trees. Avoid beaches and low-lying areas. Follow only official channels for information; disregard unverified reports.
+
+Impact Details: Schools and colleges declared closed. Central, Western, and Harbour train lines disrupted due to waterlogging. Over 400 tree-fall complaints received citywide. Multiple areas submerged, including Andheri Milan Subway, Kurla, and Chunabhatti. Fatalities reported in Chembur, Kurla, and Aarey Colony.
+
+Emergency Contact: BMC helpline number 1916.
+
+Response: Approximately 15,000 municipal officers and agency personnel deployed for ground-level operations and coordination.

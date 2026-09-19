@@ -1,0 +1,16 @@
+SOURCE: ICAR-CRIDA (Central Research Institute for Dryland Agriculture) and Punjab Agricultural University, Ludhiana - "District Agriculture Contingency Plan for District: Ludhiana"
+TYPE: government_guideline
+SECTOR: agriculture
+STATE: Punjab
+CITY: Ludhiana
+URL_OR_REF: http://www.icar-crida.res.in/CP/Punjab/PAU,%20Ludhiana/PUNJAB%205-Ludhiana%2030.04.2011.pdf
+---
+Section 2.2 "Unusual rains (untimely, unseasonal etc) (for both rainfed and irrigated situations)" - condition: "Continuous high rainfall in a short span leading to water logging":
+
+Wheat (post-harvest stage only - no vegetative/flowering/maturity-stage action specified in this table for wheat under this condition): "Store new grains in clean godowns or receptacles. Plug all cracks, cervices and holes in the godowns thoroughly. Disinfest old gunny bags by dipping them in emulsion of 6 ml Sumicidin 20EC or 5 ml Cymbush 25 EC in 10 litres of water for 10 minutes and dry them in shade before filling with grains or use new gunny bags."
+
+Condition: "Heavy rainfall with high speed winds in a short span" - Wheat (crop maturity stage): "Do not irrigate on windy or stormy days [to avoid lodging]."
+
+Maize (vegetative/flowering stages, same water-logging condition): "Do not allow the rain water to stand in the main crop as this crop is highly sensitive to standing water and promotes bacterial stalk rot."
+
+Note: This section's wheat guidance is templated identically across PAU's ICAR-CRIDA District Agriculture Contingency Plans for Punjab districts (see also Punjab_Amritsar_02 in this corpus, which contains near-identical wording) - it appears to be a shared PAU-authored table applied per district rather than district-customized text for this specific topic. The two PDFs are nonetheless genuinely separate official per-district documents (different URLs, and other sections of each plan - agro-climatic zone, soil type, rainfall normals - are district-specific).

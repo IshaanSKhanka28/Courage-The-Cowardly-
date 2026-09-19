@@ -1,0 +1,19 @@
+SOURCE: Bengaluru Urban District Disaster Management Authority (District Administration, Government of Karnataka) — Bengaluru Urban District Disaster Management Plan 2025-26
+TYPE: government_guideline
+SECTOR: traffic
+STATE: Karnataka
+CITY: Bengaluru
+URL_OR_REF: https://cdn.s3waas.gov.in/s33621f1454cacf995530ea53652ddf8fb/uploads/2025/08/17541159052585.pdf (hosted via https://bengaluruurban.nic.in/en/disaster-management/ )
+---
+[From Chapter 3, "Urban Floods" section, pages 55-56 of the Bengaluru Urban District Disaster Management Plan 2025-26]
+
+The problem of urban flooding is a result of both natural factors and land-use changes brought about by urban development. Urban flooding is significantly different from rural flooding as urbanisation leads to developed catchments which increases the flood peaks from 1.8 to 8 times and flood volumes by up to 6 times. Consequently, flooding occurs very quickly due to faster flow times, sometimes in a matter of minutes. Urban flooding is caused by the combination of meteorological, hydrological, and human factors. Due to land-use changes, flooding in urban areas can happen very rapidly with large flow. The challenges of Urban Floods Disaster Management (UFDM) tend to be considerably different from that of flooding in other areas. Problems associated with urban floods range from relatively localised incidents to major incidents, resulting in inundation of some or large parts of urban areas for several hours to many days.
+
+Localized flooding in Bengaluru Urban occurs mainly due to an inadequate drainage network, the lack of pervious surface and rampant construction in low lying areas. In addition, land use practices, solid waste management practices and drainage maintenance have influenced and exacerbated flooding incidents across the city.
+
+Instances of flooding in the district have been on the rise over the past decade, the worst cases having occurred in recent years. Bengaluru city has witnessed major flooding in 2014, 2016 and in 2017. In August 2017, Bengaluru experienced the heaviest downpour in 127 years; 129mm over 3 hours. The effects of this event brought numerous parts of the city to a standstill. Civic authorities had to rescue many people who were stranded, electricity outages caused blackouts in several areas, and the damage to property across the city was immense.
+
+Vulnerability: Increased urbanization across the district has resulted in significant changes in the drainage of storm water runoff. A critical result of urban development is the conversion of pervious surfaces into impervious surfaces that reduce groundwater infiltration. This combined with erratic rainfall patterns that are affected by climate change could lead to an increase in urban flooding incidents. Several slums and unauthorized developments in low lying areas make a large number of people directly vulnerable to urban flooding.
+
+[From the Flood Risk Reduction section (7.2.1), on early warning responsibilities:]
+To disseminate early warning signals to the Taluka administration, local authorities, and the public at large in the areas likely to be affected by a disaster so as to reduce loss of life and property. Collect and seek continuously the information update on weather including advisories from IMD and state agencies. Lead/coordinating agencies listed include DDMA, KSNDMC, IMD, CWC, WRD and SLRTI, with responsibilities to disseminate warnings and information down to the last mile.

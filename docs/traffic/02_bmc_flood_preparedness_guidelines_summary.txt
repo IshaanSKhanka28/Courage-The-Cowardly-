@@ -1,0 +1,21 @@
+SOURCE: Citizen Matters (reporting on BMC's Flood Preparedness Guidelines 2023, Disaster Management Department, Brihanmumbai Municipal Corporation)
+TYPE: news_secondary
+SECTOR: traffic
+STATE: Maharashtra
+CITY: Mumbai
+URL_OR_REF: https://citizenmatters.in/mumbai-flood-mitigation-bmc/
+---
+Note: This is a secondary (journalistic) summary of BMC's official Flood Preparedness Guidelines 2023. The primary BMC PDF (hosted at dm.mcgm.gov.in) could not be reliably downloaded during this research session (the server returned an anomalous, continuously-growing response rather than a normal file), so it is not included as a document here. This citation is therefore labeled news_secondary, not official_advisory/municipal_report, per sourcing rules.
+
+Excerpt (paraphrased from the article):
+
+Drainage System Capacity: The stormwater drains in Mumbai were originally designed to handle 25 mm per hour of rainfall. However, modern weather patterns featuring intense downpours have overwhelmed this infrastructure.
+
+Three Types of Flooding (per BMC's Flood Preparedness Guidelines 2023):
+1. Localized flooding from inadequate drainage
+2. Mithi river overflow flooding
+3. Combined flooding from high tides and elevated river flows
+
+Flood-Prone Areas: H/E, H/W, and F/N wards are identified as most susceptible, with 60% of residents in these areas exposed to flooding risk. Specific hotspots mentioned include Milan subway (Vile Parle), Parel and Dadar regions, Hindmata cloth market, and the Grant Road/Nana Chowk area.
+
+BMC's Response Measures: The municipal corporation has reduced chronic waterlogging hotspots from 440 to 84 locations through underground holding ponds (1.05-2 crore litre capacity), six large and ten small pumping stations, and 183 outfalls draining to the Arabian Sea and creeks.

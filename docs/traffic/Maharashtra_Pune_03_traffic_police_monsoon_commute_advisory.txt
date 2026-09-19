@@ -1,0 +1,14 @@
+SOURCE: Punekar News
+TYPE: news_secondary
+SECTOR: traffic
+STATE: Maharashtra
+CITY: Pune
+URL_OR_REF: https://www.punekarnews.in/pune-traffic-police-issue-comprehensive-public-advisory-for-monday-commute-evening-peak-speeds-plummet-to-15-7-kmph-amid-monsoon-delays/
+---
+Date: July 5-6, 2026. The Pune City Traffic Police reported severe congestion following intense monsoon rainfall. Sunday's telemetry data showed an average citywide speed of just 20.0 kmph, with morning peak speeds at 18.5 kmph and evening peaks plummeting to 15.7 kmph.
+
+Nine major congested corridors were identified for expected slowdowns: Tilak Road (Alka Chowk to Swargate), Shastri Road (Alka Chowk to Dandekar Bridge), Shivaji Road (AISSMS to Swargate), Jawaharlal Nehru Road (Modern College to Khandoji Baba Chowk), Fergusson College Road (Goodluck Chowk to Dnyaneshwar Paduka Chowk), Karve/Paud Roads (Paud Phata area), Senapati Bapat Road (Athavale Chowk vicinity), Solapur Road (Sopan Baug to Swargate), and Satara Road (Market Yard to Katraj Naka).
+
+Five zones faced extreme delays: Pune Station Area, Alankar Chowk, Council Hall Chowk, Wadia College Chowk, and Bund Garden Area.
+
+Key directives in the advisory: avoid non-essential travel during peak hours; no parking near junctions and waterlogged zones; restricted two-wheeler sheltering in traffic lanes; and encouraged public transit usage and carpooling.

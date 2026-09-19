@@ -1,0 +1,21 @@
+SOURCE: National Weather Service (NWS/NOAA) - "What is the heat index?"
+TYPE: official_advisory
+SECTOR: health
+STATE: National
+CITY: ALL
+URL_OR_REF: https://www.weather.gov/ama/heatindex
+---
+What is Heat Index?
+
+The heat index represents "what the temperature feels like to the human body when relative humidity is combined with the air temperature." It's driven by how moisture content affects the body's cooling mechanism - when humidity is high, perspiration cannot evaporate efficiently, making conditions feel warmer than the actual temperature.
+
+NWS Heat Index Health Categories:
+- Caution: 80F - 90F -- "Fatigue possible with prolonged exposure and/or physical activity"
+- Extreme Caution: 90F - 103F -- "Heat stroke, heat cramps, or heat exhaustion possible with prolonged exposure and/or physical activity"
+- Danger: 103F - 124F -- "Heat cramps or heat exhaustion likely, and heat stroke possible with prolonged exposure and/or physical activity"
+- Extreme Danger: 125F or higher -- "Heat stroke highly likely"
+
+Heat Index Formula:
+Heat Index = -42.379 + (2.04901523xT) + (10.14333127xRH) - (.22475541xTxRH) - (.00683783xT^2) - (.05481717xRH^2) + (.00122874xT^2xRH) + (.00085282xTxRH^2) - (.00000199xT^2xRH^2)
+
+Where T = air temperature (F) and RH = relative humidity (percentage). This equation has a margin of error of +/-1.3F.

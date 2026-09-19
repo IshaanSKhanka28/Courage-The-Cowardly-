@@ -1,0 +1,23 @@
+SOURCE: Punjab Agricultural University (PAU), Ludhiana - "Package of Practices for Crops of Punjab: Rabi 2025-26"
+TYPE: government_guideline
+SECTOR: agriculture
+STATE: Punjab
+CITY: state-wide
+URL_OR_REF: https://pau.edu/content/ccil/pf/pp_rabi.pdf
+---
+Note: This is PAU's official 184-page Rabi season package-of-practices manual, applicable to wheat cultivation everywhere in Punjab (it is not tied to one district). Excerpted below are the sections on preventing lodging from wind/rain and managing yellow rust, whose severity is explicitly linked to rainfall.
+
+On irrigation timing to avoid wind/rain-induced lodging (wheat, irrigation schedule section):
+"Depending upon the rainfall, irrigate the timely sown crop upto the end of March to avoid the harmful effect of unusual rise in temperature at grain filling/formation stage. Care should be taken not to irrigate the crop on windy days to avoid lodging. For the crop sown after December 5, continue irrigation upto April 10."
+
+On preventing lodging via reduced nitrogen (wheat variety PBW 1 Chapati, medium textured soils):
+"In medium textured soils, to prevent crop lodging and its adverse effect on quality, apply 25% less nitrogenous fertilizers and reduce one irrigation to wheat variety PBW 1 Chapati."
+
+On zero-tillage sowing reducing lodging risk:
+"...lower weeds infestation particularly Phalaris minor, no yellowing of leaves after first irrigation, ensures timely sowing, improved input use efficiency and less lodging. Use tractor drawn zero till drill or strip till drill for sowing wheat in unprepared fields."
+
+On yellow rust disease risk tied to rain and wind (integrated management of yellow rust):
+"[A temperature] range of 7-13C coupled with 85-100% relative humidity during night and maximum temperature in the range of 15-24C during day are congenial for infection, development and spread of disease. Frequent rains along with wind during February-March may further enhance the disease severity and spread."
+
+Integrated management of yellow rust recommendations:
+"Grow rust resistant (PBW Biscuit 1, PBW Zinc 2, PBW RS1, PBW 725, Unnat PBW 550, PBW 752, WHD 943, PDW 291 and PBW 660) varieties. Don't grow unrecommended varieties especially in sub-mountainous zone. Do not sow the crop in the month of October particularly in the disease prone sub-mountainous areas. Monitor the crop from 2nd week of December onward particularly after irrigation or rain to locate the initial foci of infection."

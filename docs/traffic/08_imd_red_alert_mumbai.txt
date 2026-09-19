@@ -1,0 +1,16 @@
+SOURCE: NewsOnAir (Prasar Bharati / All India Radio News Services Division, Government of India), reporting IMD's alert
+TYPE: news_secondary
+SECTOR: traffic
+STATE: Maharashtra
+CITY: Mumbai
+URL_OR_REF: https://www.newsonair.gov.in/imd-issues-red-alert-for-mumbai-as-heavy-rains-trigger-water-logging-travel-disruptions
+---
+IMD Red Alert for Mumbai: Heavy Rainfall and Disruptions
+
+Key Alert Details: The India Meteorological Department issued a Red Alert for Mumbai due to heavy to very heavy rainfall, applicable to August 16, 2025.
+
+Weather Conditions: "Intermittent rains have been lashing the city since yesterday morning, with intense showers reported in several areas during the early hours today." The continuous downpour resulted in significant water accumulation across numerous neighbourhoods.
+
+Impact and Advisories: The incessant rainfall created severe flooding in many districts, causing disruptions to normal activities and transportation. Mumbai Police cautioned residents to "avoid unnecessary travel."
+
+Regional Alerts: Beyond Mumbai's red alert status, neighbouring areas faced different warning levels - Raigad: Orange alert; Palghar and Thane: Yellow alert.

@@ -1,0 +1,24 @@
+SOURCE: The Week
+TYPE: news_secondary
+SECTOR: traffic
+STATE: Maharashtra
+CITY: Mumbai
+URL_OR_REF: https://www.theweek.in/news/india/2026/07/04/mumbai-rains-these-roads-bus-routes-are-shut-by-bmc.html
+---
+Mumbai Rain Disruptions - July 4, 2026
+
+Rainfall and Alert Status: The India Meteorological Department issued a red alert for July 4, prompting the BMC to declare afternoon holidays for schools and colleges. "Several parts of Mumbai received more than 100 mm of rainfall during the 24 hours ending at 8:00 am on Saturday."
+
+Roads Closed by BMC due to waterlogging:
+- Noor-e-Ilahi Service Road, Chembur
+- Veera Desai Road, Andheri
+- Huma Mall Junction, Vikhroli
+- Gandhinagar Junction
+- Andheri Subway
+- Road near Paresh Park Market
+- Municipal Market Road
+- Swami Vivekananda Marg, Andheri
+
+Bus Service Disruptions: The BEST suspended or diverted numerous routes, including those through Andheri Subway and S.V. Road in Jogeshwari. "Routes 202, 203, 256, 180, 359, 4, 84 and 251, 249, 252, 266, 259, 235, 242, 268 diverted via alternative roads due to flooding."
+
+Metro Disruption: Metro Line 2A experienced a 90-minute technical disruption between Dahisar East and Kandarpada stations, though services resumed afterward.

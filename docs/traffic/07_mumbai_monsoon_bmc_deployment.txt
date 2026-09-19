@@ -1,0 +1,24 @@
+SOURCE: Social News XYZ
+TYPE: news_secondary
+SECTOR: traffic
+STATE: Maharashtra
+CITY: Mumbai
+URL_OR_REF: https://www.socialnews.xyz/2026/06/24/mumbai-drenched-by-heavy-monsoon-rains-bmc-deploys-7000-personnel-as-waterlogging-hits-several-areas/
+---
+Mumbai Monsoon Response - June 24, 2026
+
+Rainfall Data (24-hour period):
+- Malvani: 340 mm (worst-affected)
+- Parel area: 334 mm
+- Colaba: 248 mm
+- Santacruz: 225 mm
+
+BMC Deployment and Response: The civic administration mobilized substantial resources to address the crisis. "More than 7,000 officers and staff" were deployed across locations to manage emergencies and maintain essential services.
+
+Response measures included activating dewatering pumps, stormwater stations, and flood-control systems. The Disaster Management Department monitored vulnerable zones including low-lying areas, railway stations, and bridges while conducting regular drainage inspections.
+
+Impact Beyond Mumbai: Severe waterlogging affected neighbouring regions. Vasai-Virar and Nalasopara experienced extensive inundation, with roads resembling "ponds after hours of heavy showers." Multiple areas reported traffic disruptions and water entering homes and businesses.
+
+Additional Incidents: Nine trees collapsed across the city due to strong winds, though no casualties occurred. One incident in Dadar East involved a tree falling on a parked vehicle.
+
+Infrastructure Preparedness Questions: Despite Vasai-Virar Municipal Corporation's claim of completing "more than 95 per cent of pre-monsoon drain-cleaning work," the extensive flooding raised concerns about drainage effectiveness and maintenance gaps.

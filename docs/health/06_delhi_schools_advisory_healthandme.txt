@@ -1,0 +1,14 @@
+SOURCE: Health and Me (healthandme.com), reporting on Delhi Government / Directorate of Education advisory
+TYPE: news_secondary
+SECTOR: health
+STATE: Delhi
+CITY: Delhi
+URL_OR_REF: https://www.healthandme.com/health-news/heatwave-in-india-delhi-govt-issues-advisory-for-schools-urges-hydration-and-reduced-outdoor-activity-article-154135353
+---
+Note: Full article text could not be completely retrieved during this research session (the fetched content was truncated mid-article). The verified portion is excerpted below; nothing beyond it is claimed.
+
+IMD Forecast: heatwave conditions at isolated places in Delhi, with maximum temperatures expected to climb between 41C and 44C through April 24.
+
+Regional Alert: The India Meteorological Department warned that heat wave conditions over Punjab, Haryana, and Uttar Pradesh are expected to persist for the next 3 days.
+
+The article's headline states that the Delhi government's Directorate of Education issued an advisory for schools urging hydration and reduced outdoor activity for children; the full text of that school advisory was not recoverable from the fetched page content.

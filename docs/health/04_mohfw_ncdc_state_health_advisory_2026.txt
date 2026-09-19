@@ -1,0 +1,32 @@
+SOURCE: National Centre for Disease Control (NCDC), Directorate General of Health Services, Ministry of Health and Family Welfare (MoHFW), Government of India
+TYPE: official_advisory
+SECTOR: health
+STATE: National
+CITY: ALL
+URL_OR_REF: https://ncdc.mohfw.gov.in/uploads/pdf/1.%20Heat%20wave%20advisory%20for%20State%20Health%20department_2026.pdf
+---
+Advisory for State Health Departments for Summer 2026
+
+The country may observe above-normal seasonal maximum temperatures in line with the observed trend of increased global temperatures. To reduce the health impacts of extreme heat, health departments must ensure preparedness and timely response.
+
+State Nodal Officers under the National Programme for Climate Change and Human Health (NPCCHH) to ensure the following activities:
+
+1. Dissemination of the following guidelines to all districts:
+- National Action Plan on Heat Related Illnesses, MoHFW
+- Strengthening Health Systems Preparedness for Heat Related Illnesses (HRI) in India
+- Emergency Cooling for Severe Heat-Related Illnesses
+- Autopsy Findings in Heat Related Deaths
+
+5. Dissemination of early warning: of heat waves issued by the India Meteorological Department (IMD) daily after 1600 hours IST with a forecast for next four days should be disseminated to health facilities and vulnerable populations.
+
+6. Issue health advisories and plan IEC activities to make the public aware of the precautions taken to safeguard against extreme heat by engaging frontline workers, print, and visual media. IEC material on heat health for general and vulnerable populations prepared by NCDC is available at https://ncdc.mohfw.gov.in/centre-for-environmental-occupational-health-climate-change-health/.
+
+8. Health facility preparedness for prevention and management of severe HRI:
+- Procurement and supply of adequate quantities of ORS packs, essential medicines, IV fluids, ice packs, and equipment to support the management of volume depletion and electrolyte imbalance etc.
+- Establish Heatstroke management units in secondary and tertiary level health care facilities.
+- Ambulance and primary care preparedness in line with "Cool First, Transport Second" strategy.
+
+Resources cited in this advisory:
+1. Guidelines for preparation of action plan- prevention and management of heat wave, 2019. National Disaster Management Authority, Government of India. Available at: https://ndma.gov.in/sites/default/files/PDF/Guidelines/heatwaveguidelines.pdf
+2. Ahmedabad heat action plan 2019. Guide to extreme heat planning in Ahmedabad, India. Amdavad Municipal Corporation.
+3. World Health Organization. Public Health Advice on Heatwave. Available at: https://www.who.int/health-topics/heatwaves

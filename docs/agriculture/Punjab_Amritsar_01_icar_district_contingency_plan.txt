@@ -1,0 +1,20 @@
+SOURCE: ICAR-CRIDA (Central Research Institute for Dryland Agriculture) and Punjab Agricultural University, Ludhiana - "District Agriculture Contingency Plan for District: Amritsar"
+TYPE: government_guideline
+SECTOR: agriculture
+STATE: Punjab
+CITY: Amritsar
+URL_OR_REF: https://www.icar-crida.res.in/CP/Punjab/PAU,%20Ludhiana/PUNJAB%201-Amritsar%2030.04.2011.pdf
+---
+Section 2.2 "Unusual rains (untimely, unseasonal etc) (for both rainfed and irrigated situations)" - condition: "Continuous high rainfall in a short span leading to water logging":
+
+Maize (vegetative stage): "Drain away the excess water and spray 6kg urea/acre in two sprays at weekly interval or broadcast additional nitrogen @ 25-50 kg urea per acre after flooding is over."
+Maize (flowering stage): "Do not allow the rain water to stand in the main crop as this crop is highly sensitive to standing water and promotes bacterial stalk rot."
+
+Wheat (post-harvest stage): "Store new grains in clean godowns or receptacles. Plug all cracks, cervices and holes in the godowns thoroughly. Disinfest old gunny bags by dipping them in emulsion of 6 ml Sumicidin 20EC or 5 ml Cymbush 25 EC in 10 litres of water for 10 minutes and dry them in shade before filling with grains or use new gunny bags."
+
+Soybean: "Sowing of soybean on raised beds in medium to heavy soils saves the crop from damage by rains especially at emergence."
+
+Condition: "Heavy rainfall with high speed winds in a short span" - Wheat: "Do not irrigate on windy or stormy days."
+Rice (same condition): "Avoid early planting of rice to keep the incidence of BLB under check."
+
+Note: This section's wheat guidance is templated near-identically across PAU's ICAR-CRIDA District Agriculture Contingency Plans for Punjab districts (see also Punjab_Ludhiana_01 in this corpus, which contains almost the same wording for wheat). The two PDFs are nonetheless genuinely separate official per-district documents (different URLs, and other sections - agro-climatic zone, soil type, rainfall normals - are district-specific), so both are kept.

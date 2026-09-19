@@ -1,0 +1,26 @@
+SOURCE: Delhi Disaster Management Authority (DDMA), Government of NCT of Delhi - "Delhi Heat Action Plan 2024-25"
+TYPE: government_guideline
+SECTOR: health
+STATE: Delhi
+CITY: Delhi
+URL_OR_REF: https://ddma.delhi.gov.in/sites/default/files/ddma/generic_multiple_files/final_hap_12.04.2024.pdf
+---
+2.6 Vulnerable Groups During Heat wave
+
+A heat wave has varied health outcomes, with specific group of people being more vulnerable to heat related mortality and morbidity. Among these are, infants, children, woman, elderly, construction workers, destitute and people from economically weaker sections.
+
+Identifying such groups is important as it allows medical professionals to prioritize actions to treat heat related illnesses effectively in order to minimize potential threats.
+
+2.6.1 Infants (0-1 years): They are particularly sensitive to heat due to different metabolism and poor ability to adjust to changes in temperatures. The infants sweat less which considerably decreases their ability to cool their body. Infants are more susceptible to heat related deaths due to their high metabolism rate and inability to remove sheets or clothing.
+
+2.6.2 Children (1-14 years): They are physiologically more vulnerable to heat wave unlike adults. Heat related illnesses are associated with their physical activity, production of more metabolic heat/kilogram in comparison to their body weight, dehydration and lower cardiac output. Henceforth, strict vigilance is required during a heat wave to avoid any heat related sickness and overheating among them.
+
+Education Department - action items for schools during heat wave:
+- Ensure supply of water for students and teachers if school is functioning.
+- If school is not functioning, permit use of school premises as shelter during day time.
+- Ensure that schools do not function during peak hours (12 noon - 4 pm) when Heat Wave is declared.
+- Display posters and distribute pamphlets on prevention of heat related illness in schools and colleges.
+- No open-air class to be conducted.
+- Rescheduling of school timing and vacation as per heat wave situation.
+- Ensuring that students avoid outdoor physical activities.
+- Ensuring cool places at all education institutes.

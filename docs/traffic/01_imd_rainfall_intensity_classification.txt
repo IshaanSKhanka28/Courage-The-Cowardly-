@@ -1,0 +1,23 @@
+SOURCE: India Meteorological Department (IMD) - Standard Operating Procedure for Weather Forecasting and Warning Services
+TYPE: official_advisory
+SECTOR: traffic
+STATE: National
+CITY: ALL
+URL_OR_REF: https://mausam.imd.gov.in/imd_latest/contents/pdf/forecasting_sop.pdf (see Chapter 1, Section 1.7.2, Table 1.5, p.10)
+---
+1.7.2. Intensity of 24-hour Accumulated rainfall
+
+For the description of intensity of 24-hour accumulated rainfall, the criteria used are given in Table 1.5.
+
+Table 1.5. Terminology for intensity of 24 hour accumulated rainfall
+
+S. No. | Terminology | Rainfall (mm)
+1. | Very light rainfall | Trace - 2.4
+2. | Light rainfall | 2.5 - 15.5
+3. | Moderate rainfall | 15.6 - 64.4
+4. | Heavy Rainfall | 64.5 - 115.5
+5. | Very Heavy Rainfall | 115.6 - 204.4
+6. | Extremely heavy rainfall | Greater than or equal to 204.5 mm
+7. | Exceptionally Heavy Rainfall | When the rainfall observed is a value near about the highest recorded rainfall at or near the station for the month or the season. However, this term will be used only when the actual rainfall amount exceeds 12 cm.
+
+Note: Only daily rainfall of at least 2.5mm is taken into consideration in the monsoon months. During non-monsoon period, rainfall less than 2.5 mm also may be considered for distribution / verification as per existing practice. Rainfall realised in the category of trace, viz., less than 2.5 mm in monsoon season and less than 0.1 mm in other seasons in a subdivision, the weather for that sub division will be described as mainly dry.

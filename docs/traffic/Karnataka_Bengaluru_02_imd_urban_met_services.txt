@@ -1,0 +1,17 @@
+SOURCE: India Meteorological Department — Urban Meteorological Services for Bengaluru (Met Centre Bengaluru)
+TYPE: official_advisory
+SECTOR: traffic
+STATE: Karnataka
+CITY: Bengaluru
+URL_OR_REF: https://mausam.imd.gov.in/bengalurums/ (City Warning page: https://mausam.imd.gov.in/bengalurums/district_warning_bngums.php )
+---
+[Content read directly from the live IMD Urban Meteorological Services for Bengaluru portal on 19 September 2026]
+
+Page title: "Bengaluru | IMD Urban Meteorological Services" / "Bengaluru | IMD Districtwise Nowcast"
+Publisher footer: "India Meteorological Department, Ministry of Earth Sciences, Government of India"
+
+The portal's "CITY WARNING - BENGALURU" panel displays a rolling 5-day warning status specifically for Bengaluru city, shown by date (e.g. September 19, 2026 through September 23, 2026), using a four-level colour-coded legend: "No warning", "Watch", "Alert", "Warning". At the time of access, the status for all five listed dates read "No warning".
+
+The portal's "INTERACTIVE DISPLAY OF WEATHER AND THUNDERSTORM WARNINGS" section provides "CURRENT WEATHER ACROSS BENGALURU" from a dedicated network of city automatic weather stations located at localities across Bengaluru, including: Hebbal, Hombegowda Nagar, Jayanagar, Peenya, SaneguravaHalli, SilkBoard, Bengaluru-City, Bengaluru (HAL), Bapuji Nagar, BTM Layout, KadabesanaHalli, and City Railway Station — each reporting live temperature, wind and humidity readings. Several of these station locations (SilkBoard, BTM Layout, Bengaluru-HAL) coincide with roads/junctions that recur as chronic waterlogging and traffic-choke points in Bengaluru during heavy rain.
+
+The Met Centre Bengaluru's broader service description (from mausam.imd.gov.in/bengaluru/aboutus.php) states that warnings and alerts are issued as "subdivision-wise and district-wise warnings", plus nowcast alerts organized by district and station, and that a Flood Meteorological Office in Bengaluru issues Quantitative Precipitation Forecast (QPF) and Hydromet (HM) Bulletins daily at 1000 and 1300 hours IST. District forecasts and warnings covering all 30 districts of Karnataka, including Bengaluru Urban and Bengaluru Rural, are issued daily at 1000, 1300, 1800 and 2100 hours IST.

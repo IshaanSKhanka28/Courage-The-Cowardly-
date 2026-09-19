@@ -1,0 +1,16 @@
+SOURCE: Punekar News
+TYPE: news_secondary
+SECTOR: traffic
+STATE: Maharashtra
+CITY: Pune
+URL_OR_REF: https://www.punekarnews.in/pune-heavy-rainfall-in-katraj-disrupts-traffic-on-katraj-kondhwa-road/
+---
+Date: May 20, 2025. Location: Katraj, Pune (specifically affecting the Katraj-Kondhwa Road).
+
+Heavy rainfall that began Tuesday afternoon led to significant traffic disruptions on the busy Katraj-Kondhwa Road. Water accumulated at specific locations including Mauli Nagar and Gokul Nagar, creating waterlogged stretches that severely hindered vehicle movement.
+
+Commuters faced extended delays due to multiple factors: waterlogged stretches, reduced visibility, and slow-moving traffic.
+
+Authorities advised caution, urging motorists to "exercise caution while traveling in the area."
+
+Note: this article does not provide rainfall measurements in millimeters, only a descriptive account of the heavy rainfall event and its traffic consequences.

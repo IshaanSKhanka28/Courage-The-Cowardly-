@@ -1,0 +1,20 @@
+SOURCE: The Tribune (India)
+TYPE: news_secondary
+SECTOR: agriculture
+STATE: Punjab
+CITY: Ludhiana
+URL_OR_REF: https://www.tribuneindia.com/news/ludhiana/wheat-crop-on-25k-hectares-damaged-in-ludhiana-493021
+---
+Wheat Crop Damage in Ludhiana
+
+Location: Ludhiana and Ropar districts, Punjab. Date of incident: late March 2023 (rainfall on March 25-26).
+
+Damage extent: Over 25,000 hectares affected in Ludhiana district; approximately 30,000 hectares damaged in Ropar district (33-75% damage assessed). Total wheat cultivation in Ludhiana: 2.43 lakh hectares.
+
+Cause: Unseasonal rainfall and gusty winds during the hard dough stage when wheat was at maturity.
+
+Impact details: Crop lodging (flattening) caused significant losses. "Harvesting process will be delayed by 15 to 20 days," according to the Chief Agriculture Officer. Expected yield decrease of approximately 10%. Mustard and barley crops also damaged in Ropar.
+
+Affected villages: Aatiana, Rajoana Kalan, Rajoana Khurd, Sudhar, Akalgarh, Raikot, and Rauni.
+
+Positive note: Farmers using PAU's surface seeding technique experienced less lodging than those using traditional methods, demonstrating the effectiveness of this approach for weather resilience.

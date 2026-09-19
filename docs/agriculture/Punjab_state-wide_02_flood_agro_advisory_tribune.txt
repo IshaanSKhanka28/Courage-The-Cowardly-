@@ -1,0 +1,24 @@
+SOURCE: The Tribune (India), reporting a Punjab Agricultural University (PAU) advisory
+TYPE: news_secondary
+SECTOR: agriculture
+STATE: Punjab
+CITY: state-wide
+URL_OR_REF: https://www.tribuneindia.com/news/ludhiana/agro-advisory-and-contingency-crop-planning-issued-for-flood-affected-punjab-farmers
+---
+Agro-Advisory for Flood-Affected Punjab Farmers
+
+Overview: Punjab Agricultural University (PAU) issued comprehensive guidance to help farmers recover from recent flood damage through immediate intervention and alternative cropping strategies. This advisory is state-wide, not tied to one district.
+
+Immediate Drainage Measures: The advisory emphasizes swift water removal to prevent "root suffocation and disease outbreaks." Farmers should open bund ridges, clean drain channels, and use pumping sets for stagnant water evacuation. Dr J P Singh (contact 98728-83963) provides technical consultation.
+
+Crop-Specific Guidance:
+- Rice & Basmati: Address nitrogen deficiency with 3% urea foliar spray. Apply 1.5% potassium nitrate at boot stage to reduce sterility. Combat false smut with two-step fungicide treatments and manage zinc deficiency using zinc sulphate sprays.
+- Maize: Create drainage channels immediately. Apply urea in two foliar sprays post-flooding. Remove stem rot-infected plants promptly.
+- Groundnut & Sesame: Remove standing water. Treat yellowing with 2% urea spray.
+- Sorghum & Bajra: Apply 3% urea spray for yellowing; no major disease threats reported.
+- Cotton: Requires urgent drainage. Use four potassium nitrate sprays to minimize flower drop. Manage leaf reddening and monitor for pink bollworm, whitefly, and jassid infestations.
+- Sugarcane: Apply nitrogen post-flooding if red disease is absent.
+
+Contingency Cropping for Completely Damaged Fields: For early September planting, farmers can sow Toria (yielding 4-5 quintals/acre) or use maize, bajra, and sorghum as fodder alternatives.
+
+Winter Crop Recommendations: Recommended varieties include Kufri Surya potatoes, Matar Ageta-7 peas, Punjab Maghri cauliflower, and various leafy greens and root vegetables for vegetable-growing regions.
