@@ -582,18 +582,69 @@ function AboutPage() {
         <span style={{ fontSize: "11px", fontWeight: "600", letterSpacing: "0.08em", color: "#38bdf8", background: "rgba(56, 189, 248, 0.15)", padding: "5px 12px", borderRadius: "999px", textTransform: "uppercase" }}>Project Aeris</span>
         <h1 style={{ fontFamily: "'Outfit', sans-serif", fontSize: "32px", fontWeight: "700", color: "#f8fafc", margin: "16px 0 8px 0", letterSpacing: "-0.02em" }}>Grounding Weather in Real-World Impact</h1>
         <p style={{ fontSize: "16px", color: "#cbd5e1", margin: "0 0 24px 0", fontWeight: "500", lineHeight: "1.6" }}>
-          Aeris bridges live telemetry forecasts with official municipal advisories to provide safe, verified guidance. By integrating real-time atmospheric indices, precipitation curves, and dynamic risk assessments, our platform empowers users to make informed daily travel and safety decisions.
+          Aeris turns live weather forecasts into risk levels using deterministic threshold rules — IMD rainfall categories and the NOAA heat index formula — not model guesswork. It then retrieves real government and municipal advisory documents and uses an LLM to explain the evidence in plain language, citing only what was actually retrieved.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginTop: "24px" }}>
           <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", padding: "20px", borderRadius: "16px" }}>
             <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#38bdf8", margin: "0 0 8px 0" }}>Live Telemetry</h3>
-            <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0, lineHeight: "1.5" }}>High-precision meteorological data streams across multiple global regions.</p>
+            <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0, lineHeight: "1.5" }}>Live forecast data for the six cities we cover — Mumbai, Pune, Bengaluru, Delhi, Ludhiana, and Amritsar. Not a global weather service.</p>
           </div>
           <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", padding: "20px", borderRadius: "16px" }}>
             <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#38bdf8", margin: "0 0 8px 0" }}>AI Risk Assistant</h3>
-            <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0, lineHeight: "1.5" }}>Context-aware intelligent responses tailored to localized safety hazards.</p>
+            <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0, lineHeight: "1.5" }}>Retrieves real advisory documents through RAG and explains the evidence in plain language, citing only what was actually retrieved.</p>
           </div>
         </div>
+      </div>
+
+      {/* Coverage */}
+      <div style={{ marginTop: "28px" }}>
+        <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: "22px", fontWeight: "700", color: "#f8fafc", margin: "0 0 6px 0", letterSpacing: "-0.01em" }}>Coverage</h2>
+        <p style={{ fontSize: "13px", color: "#94a3b8", margin: "0 0 16px 0", lineHeight: "1.5" }}>Aeris currently covers three sectors across six cities — not a national or global service.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
+          <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", padding: "20px", borderRadius: "16px" }}>
+            <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#38bdf8", margin: "0 0 8px 0" }}>Traffic & Urban Mobility</h3>
+            <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0, lineHeight: "1.5" }}>Maharashtra (Mumbai, Pune) and Karnataka (Bengaluru).</p>
+          </div>
+          <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", padding: "20px", borderRadius: "16px" }}>
+            <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#38bdf8", margin: "0 0 8px 0" }}>Public Health & Heatwave Safety</h3>
+            <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0, lineHeight: "1.5" }}>Delhi.</p>
+          </div>
+          <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", padding: "20px", borderRadius: "16px" }}>
+            <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#38bdf8", margin: "0 0 8px 0" }}>Agriculture</h3>
+            <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0, lineHeight: "1.5" }}>Punjab (Ludhiana, Amritsar).</p>
+          </div>
+        </div>
+      </div>
+
+      {/* How It Works */}
+      <div style={{ marginTop: "28px" }}>
+        <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: "22px", fontWeight: "700", color: "#f8fafc", margin: "0 0 16px 0", letterSpacing: "-0.01em" }}>How It Works</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
+          <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", padding: "20px", borderRadius: "16px" }}>
+            <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#38bdf8", margin: "0 0 8px 0" }}>1. Live Forecast</h3>
+            <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0, lineHeight: "1.5" }}>Pulls current forecast data — temperature, humidity, rainfall, wind — for the requested city.</p>
+          </div>
+          <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", padding: "20px", borderRadius: "16px" }}>
+            <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#38bdf8", margin: "0 0 8px 0" }}>2. Deterministic Risk Rules</h3>
+            <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0, lineHeight: "1.5" }}>Classifies risk with fixed thresholds — IMD rainfall categories for traffic, the NOAA heat index formula for health — no model guessing on the classification itself.</p>
+          </div>
+          <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", padding: "20px", borderRadius: "16px" }}>
+            <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#38bdf8", margin: "0 0 8px 0" }}>3. Verified Advisory Retrieval</h3>
+            <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0, lineHeight: "1.5" }}>Searches a library of real government, municipal, and agricultural advisory documents for ones relevant to the forecast and location.</p>
+          </div>
+          <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", padding: "20px", borderRadius: "16px" }}>
+            <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#38bdf8", margin: "0 0 8px 0" }}>4. Cited Answer</h3>
+            <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0, lineHeight: "1.5" }}>An LLM explains the retrieved evidence in plain language; any claim not backed by a retrieved document is stripped before it reaches you.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Built Responsibly */}
+      <div style={{ marginTop: "28px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", padding: "24px", borderRadius: "16px" }}>
+        <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: "22px", fontWeight: "700", color: "#f8fafc", margin: "0 0 10px 0", letterSpacing: "-0.01em" }}>Built Responsibly</h2>
+        <p style={{ fontSize: "14px", color: "#cbd5e1", margin: 0, lineHeight: "1.6" }}>
+          Aeris doesn't try to out-forecast IMD or any official meteorological source — it applies their published thresholds and formulas consistently rather than predicting weather itself. Every citation the assistant gives is mechanically checked against the documents actually retrieved for that query; claims that aren't backed by retrieved evidence are stripped rather than trusted blindly from the model.
+        </p>
       </div>
     </div>
   );
