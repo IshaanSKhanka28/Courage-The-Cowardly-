@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Link, useLocation, Navigate } from "react-router-dom";
-import { Info, Sun, MessageSquare, ShieldCheck, Wind, Droplets, AlertTriangle, RefreshCw, Eye, Sunrise } from "lucide-react";
+import { Info, Sun, MessageSquare, Wind, Droplets, AlertTriangle, RefreshCw, Eye, Sunrise } from "lucide-react";
 import ChatPage from "./ChatPage";
+import logoImg from "./logo1.png";
 
 // Hand-Crafted Organic Animated Weather SVG Icons
 function AnimatedWeatherIcon({ type, size = 70 }) {
@@ -657,8 +658,8 @@ export default function App() {
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "4px", marginBottom: "32px" }}>
-            <div style={{ width: "38px", height: "38px", borderRadius: "10px", backgroundColor: "#38bdf8", color: "#090d16", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <ShieldCheck size={22} />
+            <div style={{ width: "38px", height: "38px", borderRadius: "10px", overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <img src={logoImg} alt="Aeris Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </div>
             <div style={{ overflow: "hidden", whiteSpace: "nowrap", opacity: isExpanded ? 1 : 0, transition: "opacity 0.2s" }}>
               <h1 style={{ fontFamily: "'Outfit', sans-serif", fontSize: "16px", fontWeight: "700", color: "#f8fafc", margin: 0, letterSpacing: "0.03em" }}>AERIS</h1>
