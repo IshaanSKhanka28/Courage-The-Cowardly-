@@ -10,7 +10,7 @@ chromadb
 sentence-transformers
 
 # --- LLM ---
-anthropic
+google-generativeai
 
 # --- Testing ---
 pytest
