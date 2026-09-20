@@ -11,6 +11,7 @@ sentence-transformers
 
 # --- LLM ---
 google-generativeai
+anthropic
 
 # --- Testing ---
 pytest
