@@ -789,35 +789,45 @@ async def ask_nimit(payload: AskRequest):
                 if "crop" in query or "wheat" in query or "harvest" in query:
                     rainfall = values.get("rainfall_mm")
                     crop_stage = values.get("crop_stage", "grain-filling")
+                    opening = "Some risk here, and it is worth watching closely."
                     explanation = (
-                        f"The forecast has about {rainfall:g}mm of rain, and I am assuming the wheat is "
-                        f"at the {crop_stage.replace('_', '-')} stage based on the regional calendar."
+                        f"You are looking at about {rainfall:g}mm of rain, and I am assuming the wheat is "
+                        f"at the {crop_stage.replace('_', '-')} stage based on the regional calendar; "
+                        "that is when unseasonal rain can lead to lodging and disease."
                     )
                     advice = (
-                        "Clear the field drainage and check for lodging or leaf disease after the rain. "
-                        "If that crop stage assumption is wrong, the risk could be different."
+                        "Clear the field drainage and check for lodging or leaf disease after the rain."
                     )
+                    closing = "One caveat: if your crop is at a different stage, the risk could be different."
                 elif "child" in query or "kid" in query or "sports" in query or "heat" in query:
                     temperature = values.get("temp_c")
                     heat_index = values.get("heat_index_c")
+                    opening = "I'd hold off, at least during the standard afternoon slot."
                     explanation = (
                         f"It is around {temperature:g}C, but the heat index feels closer to {heat_index:.1f}C, "
-                        "which is a poor combination for children's outdoor exertion."
+                        "which is a poor combination for children's outdoor exertion and heat illness risk."
                     )
+                    advice = "Move practice indoors, or use an early-morning or evening slot if that is flexible."
+                    closing = "I'd treat that as a high-confidence call because the heat reading and the guidance point the same way."
                 else:
                     rainfall = values.get("rainfall_mm")
                     if values.get("is_known_flood_zone"):
+                        opening = "Yeah, I'd avoid it if you can."
                         explanation = (
-                            f"Mumbai is expecting around {rainfall:g}mm of rain, and this is a known "
+                            f"Mumbai is expecting around {rainfall:g}mm of rain, and the route is a known "
                             "flood-prone spot when rainfall gets into this range."
                         )
+                        advice = "Take the flyover or push the commute past the heaviest rain if you can."
+                        closing = "I'd call this a high-confidence call because the forecast and the area's track record point the same way."
                     else:
+                        opening = "You can probably go ahead, but leave yourself some room."
                         explanation = f"The forecast is for around {rainfall:g}mm of rain in the area."
+                        closing = "The exact conditions on your route may still vary."
 
                 sources_json = _json.dumps({"sources_cited": srcs[:2]})
                 fake_text = (
-                    f"{opening} {explanation} {advice} "
-                    f"That lines up with the local evidence from {primary_src}.\n\n"
+                    f"{opening} {explanation} {advice} {closing} "
+                    f"That is consistent with the evidence from {primary_src}.\n\n"
                     f"```json\n{sources_json}\n```"
                 )
                 client_mock = FakeAnthropicClient(response_text=fake_text)
