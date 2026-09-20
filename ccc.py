@@ -1,5 +1,6 @@
 import logging
 import os
+import time
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
@@ -267,6 +268,50 @@ def _detect_involves_children(query: str) -> bool:
 # 5. OPEN-METEO WEATHER CLIENT
 # ==========================================
 
+_OPEN_METEO_CACHE: Dict[str, Tuple[float, Dict[str, Any]]] = {}
+_OPEN_METEO_CACHE_TTL_SECONDS = 600  # 10 minutes
+
+
+async def _fetch_open_meteo(url: str, params: Dict[str, Any], timeout: float = 5.0) -> Optional[Dict[str, Any]]:
+    """GET url with params, with a short TTL cache in front of it.
+
+    Confirmed via Railway deploy logs: "Open-Meteo returned HTTP 429" on
+    essentially every call, even spaced out ones - Open-Meteo's free tier
+    rate-limits per source IP, and on a shared-egress-IP host like Railway
+    that limit can be exhausted by *other* apps sharing the IP, not just this
+    one's own traffic. Caching identical requests for a few minutes both cuts
+    our own call volume and means a transient 429 doesn't immediately
+    degrade every city to the static fallback profile - a cached real
+    response is served instead. Returns the parsed JSON body on success
+    (cached or fresh), or None if the request failed / was rate-limited and
+    nothing usable is cached yet.
+    """
+    cache_key = url + "?" + "&".join(f"{k}={v}" for k, v in sorted(params.items(), key=lambda kv: kv[0]))
+    now = time.monotonic()
+
+    cached = _OPEN_METEO_CACHE.get(cache_key)
+    if cached is not None and (now - cached[0]) < _OPEN_METEO_CACHE_TTL_SECONDS:
+        return cached[1]
+
+    try:
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            response = await client.get(url, params=params)
+            if response.status_code == 200:
+                data = response.json()
+                _OPEN_METEO_CACHE[cache_key] = (now, data)
+                return data
+            logger.warning("Open-Meteo returned HTTP %s for params %s", response.status_code, params)
+    except Exception as exc:
+        logger.warning("Open-Meteo call failed for params %s: %s", params, exc)
+
+    # Nothing fresh - serve a stale cache entry if we have one rather than
+    # nothing, since "a few minutes old" beats "always the static fallback".
+    if cached is not None:
+        logger.warning("Serving stale (>%ss old) cached Open-Meteo response after failure.", _OPEN_METEO_CACHE_TTL_SECONDS)
+        return cached[1]
+    return None
+
+
 async def get_weather_forecast(location: str) -> Tuple[Dict[str, Any], bool]:
     """Fetch real 1-day weather forecast from Open-Meteo, falling back to cached profile on error."""
     city_key = location.lower().strip()
@@ -288,39 +333,32 @@ async def get_weather_forecast(location: str) -> Tuple[Dict[str, Any], bool]:
         "timezone": "auto",
     }
 
-    try:
-        async with httpx.AsyncClient(timeout=5.0) as client:
-            response = await client.get(url, params=params)
-            if response.status_code == 200:
-                data = response.json()
-                hourly = data.get("hourly", {})
-                precipitation = hourly.get("precipitation", [])
-                temperatures = hourly.get("temperature_2m", [])
-                humidity = hourly.get("relative_humidity_2m", [])
+    data = await _fetch_open_meteo(url, params)
+    if data is not None:
+        hourly = data.get("hourly", {})
+        precipitation = hourly.get("precipitation", [])
+        temperatures = hourly.get("temperature_2m", [])
+        humidity = hourly.get("relative_humidity_2m", [])
 
-                total_rain = sum(value or 0 for value in precipitation)
-                max_temp = (
-                    max(temperatures)
-                    if temperatures
-                    else loc_info["fallback"]["max_temperature_c"]
-                )
-                avg_humidity = (
-                    sum(value or 0 for value in humidity) / len(humidity)
-                    if humidity
-                    else loc_info["fallback"]["avg_relative_humidity"]
-                )
+        total_rain = sum(value or 0 for value in precipitation)
+        max_temp = (
+            max(temperatures)
+            if temperatures
+            else loc_info["fallback"]["max_temperature_c"]
+        )
+        avg_humidity = (
+            sum(value or 0 for value in humidity) / len(humidity)
+            if humidity
+            else loc_info["fallback"]["avg_relative_humidity"]
+        )
 
-                weather_data = {
-                    "location": loc_info["city"],
-                    "total_precipitation_mm": round(total_rain, 1),
-                    "max_temperature_c": round(max_temp, 1),
-                    "avg_relative_humidity": round(avg_humidity, 1),
-                }
-                return weather_data, False
-
-            logger.warning("Open-Meteo returned HTTP %s for %s", response.status_code, location)
-    except Exception as exc:
-        logger.warning("Open-Meteo API call failed for %s: %s. Using fallback.", location, exc)
+        weather_data = {
+            "location": loc_info["city"],
+            "total_precipitation_mm": round(total_rain, 1),
+            "max_temperature_c": round(max_temp, 1),
+            "avg_relative_humidity": round(avg_humidity, 1),
+        }
+        return weather_data, False
 
     return loc_info["fallback"], True
 
@@ -409,95 +447,88 @@ async def get_weather_snapshot(location: str) -> Tuple[Dict[str, Any], bool]:
         "timezone": "auto",
     }
 
-    try:
-        async with httpx.AsyncClient(timeout=5.0) as client:
-            response = await client.get(url, params=params)
-            if response.status_code == 200:
-                data = response.json()
-                hourly = data.get("hourly", {})
-                times = hourly.get("time", [])
-                temps = hourly.get("temperature_2m", [])
-                humidity = hourly.get("relative_humidity_2m", [])
-                precip = hourly.get("precipitation", [])
-                precip_prob = hourly.get("precipitation_probability", [])
-                wind = hourly.get("windspeed_10m", [])
-                pressure = hourly.get("surface_pressure", [])
-                visibility = hourly.get("visibility", [])
-                uv = hourly.get("uv_index", [])
-                codes = hourly.get("weathercode", [])
-                is_day_series = hourly.get("is_day", [])
+    data = await _fetch_open_meteo(url, params)
+    if data is not None:
+        hourly = data.get("hourly", {})
+        times = hourly.get("time", [])
+        temps = hourly.get("temperature_2m", [])
+        humidity = hourly.get("relative_humidity_2m", [])
+        precip = hourly.get("precipitation", [])
+        precip_prob = hourly.get("precipitation_probability", [])
+        wind = hourly.get("windspeed_10m", [])
+        pressure = hourly.get("surface_pressure", [])
+        visibility = hourly.get("visibility", [])
+        uv = hourly.get("uv_index", [])
+        codes = hourly.get("weathercode", [])
+        is_day_series = hourly.get("is_day", [])
 
-                current = data.get("current_weather", {})
-                current_time = current.get("time", "")
-                current_hour_key = current_time[:13] + ":00" if len(current_time) >= 13 else None
-                now_idx = times.index(current_hour_key) if current_hour_key in times else 0
+        current = data.get("current_weather", {})
+        current_time = current.get("time", "")
+        current_hour_key = current_time[:13] + ":00" if len(current_time) >= 13 else None
+        now_idx = times.index(current_hour_key) if current_hour_key in times else 0
 
-                current_code = current.get("weathercode")
-                if current_code is None and now_idx < len(codes):
-                    current_code = codes[now_idx]
-                icon, condition = _weathercode_to_condition(current_code)
+        current_code = current.get("weathercode")
+        if current_code is None and now_idx < len(codes):
+            current_code = codes[now_idx]
+        icon, condition = _weathercode_to_condition(current_code)
 
-                current_is_day = current.get("is_day")
-                is_day_now = bool(current_is_day) if current_is_day is not None else (
-                    bool(is_day_series[now_idx]) if now_idx < len(is_day_series) else True
-                )
+        current_is_day = current.get("is_day")
+        is_day_now = bool(current_is_day) if current_is_day is not None else (
+            bool(is_day_series[now_idx]) if now_idx < len(is_day_series) else True
+        )
 
-                hourly_entries = []
-                for i in range(now_idx, min(now_idx + 7, len(times))):
-                    h_icon, _ = _weathercode_to_condition(codes[i] if i < len(codes) else None)
-                    hourly_entries.append({
-                        "time": "Now" if i == now_idx else _format_hour_label(times[i]),
-                        "temp_c": round(temps[i], 1) if i < len(temps) and temps[i] is not None else None,
-                        "icon": h_icon,
-                        "precip_probability": precip_prob[i] if i < len(precip_prob) else None,
-                        "humidity_pct": round(humidity[i], 1) if i < len(humidity) and humidity[i] is not None else None,
-                        "wind_kmh": round(wind[i], 1) if i < len(wind) and wind[i] is not None else None,
-                        "uv_index": round(uv[i], 1) if i < len(uv) and uv[i] is not None else None,
-                        "is_day": bool(is_day_series[i]) if i < len(is_day_series) else True,
-                    })
+        hourly_entries = []
+        for i in range(now_idx, min(now_idx + 7, len(times))):
+            h_icon, _ = _weathercode_to_condition(codes[i] if i < len(codes) else None)
+            hourly_entries.append({
+                "time": "Now" if i == now_idx else _format_hour_label(times[i]),
+                "temp_c": round(temps[i], 1) if i < len(temps) and temps[i] is not None else None,
+                "icon": h_icon,
+                "precip_probability": precip_prob[i] if i < len(precip_prob) else None,
+                "humidity_pct": round(humidity[i], 1) if i < len(humidity) and humidity[i] is not None else None,
+                "wind_kmh": round(wind[i], 1) if i < len(wind) and wind[i] is not None else None,
+                "uv_index": round(uv[i], 1) if i < len(uv) and uv[i] is not None else None,
+                "is_day": bool(is_day_series[i]) if i < len(is_day_series) else True,
+            })
 
-                total_rain = sum(value or 0 for value in precip)
-                max_temp = max(temps) if temps else loc_info["fallback"]["max_temperature_c"]
-                avg_humidity = (
-                    sum(value or 0 for value in humidity) / len(humidity)
-                    if humidity
-                    else loc_info["fallback"]["avg_relative_humidity"]
-                )
+        total_rain = sum(value or 0 for value in precip)
+        max_temp = max(temps) if temps else loc_info["fallback"]["max_temperature_c"]
+        avg_humidity = (
+            sum(value or 0 for value in humidity) / len(humidity)
+            if humidity
+            else loc_info["fallback"]["avg_relative_humidity"]
+        )
 
-                daily = data.get("daily", {})
-                sunrise_list = daily.get("sunrise", [])
-                sunset_list = daily.get("sunset", [])
+        daily = data.get("daily", {})
+        sunrise_list = daily.get("sunrise", [])
+        sunset_list = daily.get("sunset", [])
 
-                snapshot = {
-                    "location": loc_info["city"],
-                    "state": loc_info["state"],
-                    "condition": condition,
-                    "icon": icon,
-                    "is_day": is_day_now,
-                    "temp_c": round(
-                        current.get("temperature", temps[now_idx] if now_idx < len(temps) else max_temp), 1
-                    ),
-                    "wind_kmh": round(current.get("windspeed", wind[now_idx] if now_idx < len(wind) else 0) or 0, 1),
-                    "humidity_pct": round(humidity[now_idx], 1) if now_idx < len(humidity) else round(avg_humidity, 1),
-                    "uv_index": round(uv[now_idx], 1) if now_idx < len(uv) and uv[now_idx] is not None else None,
-                    "visibility_km": (
-                        round(visibility[now_idx] / 1000, 1)
-                        if now_idx < len(visibility) and visibility[now_idx] is not None
-                        else None
-                    ),
-                    "pressure_hpa": round(pressure[now_idx], 1) if now_idx < len(pressure) and pressure[now_idx] is not None else None,
-                    "sunrise": _format_clock_time(sunrise_list[0]) if sunrise_list else None,
-                    "sunset": _format_clock_time(sunset_list[0]) if sunset_list else None,
-                    "hourly": hourly_entries,
-                    "total_precipitation_mm": round(total_rain, 1),
-                    "max_temperature_c": round(max_temp, 1),
-                    "avg_relative_humidity": round(avg_humidity, 1),
-                }
-                return snapshot, False
-
-            logger.warning("Open-Meteo returned HTTP %s for %s", response.status_code, location)
-    except Exception as exc:
-        logger.warning("Open-Meteo full snapshot call failed for %s: %s. Using fallback.", location, exc)
+        snapshot = {
+            "location": loc_info["city"],
+            "state": loc_info["state"],
+            "condition": condition,
+            "icon": icon,
+            "is_day": is_day_now,
+            "temp_c": round(
+                current.get("temperature", temps[now_idx] if now_idx < len(temps) else max_temp), 1
+            ),
+            "wind_kmh": round(current.get("windspeed", wind[now_idx] if now_idx < len(wind) else 0) or 0, 1),
+            "humidity_pct": round(humidity[now_idx], 1) if now_idx < len(humidity) else round(avg_humidity, 1),
+            "uv_index": round(uv[now_idx], 1) if now_idx < len(uv) and uv[now_idx] is not None else None,
+            "visibility_km": (
+                round(visibility[now_idx] / 1000, 1)
+                if now_idx < len(visibility) and visibility[now_idx] is not None
+                else None
+            ),
+            "pressure_hpa": round(pressure[now_idx], 1) if now_idx < len(pressure) and pressure[now_idx] is not None else None,
+            "sunrise": _format_clock_time(sunrise_list[0]) if sunrise_list else None,
+            "sunset": _format_clock_time(sunset_list[0]) if sunset_list else None,
+            "hourly": hourly_entries,
+            "total_precipitation_mm": round(total_rain, 1),
+            "max_temperature_c": round(max_temp, 1),
+            "avg_relative_humidity": round(avg_humidity, 1),
+        }
+        return snapshot, False
 
     fb = loc_info["fallback"]
     if fb["total_precipitation_mm"] > 20:
