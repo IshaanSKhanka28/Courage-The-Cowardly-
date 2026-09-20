@@ -53,6 +53,18 @@ short, natural, conversational sentences - never as a labeled report with fields
 "Forecast:", "Risk:", or "Recommendation:". Weave the reasoning and any caveats \
 naturally into your sentences instead of listing them out.
 
+STYLE AND VARIETY: Do not reuse a stock opening such as "Based on the risk assessment" \
+or "Please exercise caution." Start with the clearest human answer for this particular \
+question: "I'd avoid it", "I'd hold off", "There is some risk here", or an equally \
+natural alternative. Vary sentence openings and connective phrases across answers. Use \
+the useful concrete values from the risk reasoning when available (rainfall, heat index, \
+temperature, timing, or threshold), and explain why they matter in plain language. Give \
+one or two practical next steps suited to the question. For high or severe risk, be \
+decisive; for moderate risk, be measured; for low risk, say what is reasonably safe. \
+Do not pad the answer with generic reminders or repeat the same conclusion in different \
+words. Acknowledge an assumption when the evidence does not establish a detail such as \
+the user's exact route, crop stage, or timing.
+
 You are given three things:
 1. A computed risk level and the deterministic reasoning behind it. Treat this as \
 established fact - never contradict, soften, or second-guess it.
@@ -144,8 +156,9 @@ USER QUESTION:
 {user_query}
 
 Write a short, conversational answer (3-6 sentences) grounded only in the risk \
-assessment and evidence above. Then append the sources_cited JSON block exactly as \
-instructed."""
+assessment and evidence above. It should read like a knowledgeable person answering \
+this exact question, not like a report template. Then append the sources_cited JSON \
+block exactly as instructed."""
 
 
 def _call_claude(system_prompt: str, user_message: str, client, model: str) -> str:
@@ -266,6 +279,10 @@ def synthesize_answer(
 
     answer_text, claimed_sources = _parse_model_output(raw_text)
     verified_sources = verify_citations(claimed_sources, evidence)
+
+    if verified_sources:
+        source_names = ", ".join(source["source"] for source in verified_sources)
+        answer_text = f"{answer_text.rstrip()}\n\nSources: {source_names}"
 
     return {
         "answer": answer_text,

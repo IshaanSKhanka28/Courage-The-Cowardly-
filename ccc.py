@@ -770,14 +770,27 @@ async def ask_nimit(payload: AskRequest):
             def offline_synthesizer(r_res, evid, q_text):
                 srcs = [e.get("source") for e in evid if e.get("source")]
                 primary_src = srcs[0] if srcs else "official guidelines"
-                snippet = evid[0]["text"][:140].replace("\n", " ").strip() if evid else ""
+                risk = r_res.risk_level.value.upper()
+                query = q_text.lower()
+                if "crop" in query or "wheat" in query or "harvest" in query:
+                    opening = "There is some crop risk here, worth watching."
+                    advice = "Keep field drainage clear and check the crop closely after the rain."
+                elif "child" in query or "kid" in query or "sports" in query or "heat" in query:
+                    opening = "I'd hold off on outdoor activity during the hottest part of the day."
+                    advice = "An early-morning or evening slot is the better option if practice cannot move indoors."
+                elif risk in {"HIGH", "SEVERE"}:
+                    opening = "Yeah, I'd avoid that route for now."
+                    advice = "Use an alternative route and allow extra time if you have to travel."
+                else:
+                    opening = "You can probably go ahead, but keep an eye on conditions."
+                    advice = "Give yourself a little extra time and recheck the local update before leaving."
+
+                reasoning = " ".join(r_res.reasoning[:2])
+                sources_json = _json.dumps({"sources_cited": srcs[:2]})
                 fake_text = (
-                    f"Based on the {r_res.risk_level.value.upper()} risk assessment, please exercise caution. "
-                    f"As noted by {primary_src}: \"{snippet}...\". "
-                    f"Stay tuned to local advisories before traveling.\n\n"
-                    f"```json\n"
-                    f"{_json.dumps({'sources_cited': srcs[:2]})}\n"
-                    f"```"
+                    f"{opening} {reasoning} {advice} "
+                    f"The guidance from {primary_src} is relevant here.\n\n"
+                    f"```json\n{sources_json}\n```"
                 )
                 client_mock = FakeAnthropicClient(response_text=fake_text)
                 try:
