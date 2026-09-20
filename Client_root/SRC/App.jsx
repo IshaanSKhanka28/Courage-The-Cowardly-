@@ -213,92 +213,98 @@ function AnimatedBarChart({ data, color = "#38bdf8", height = 75 }) {
   );
 }
 
+const NIMIT_WEATHER_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/weather`;
+
+const WEATHER_LOCATIONS = ['Mumbai', 'Pune', 'Bengaluru', 'Delhi', 'Ludhiana', 'Amritsar'];
+
+const RISK_LEVEL_COLORS = {
+  LOW: "#4ade80",
+  MODERATE: "#fbbf24",
+  HIGH: "#fb923c",
+  SEVERE: "#ef4444",
+};
+
+// Maps the backend's generic icon (sun|cloud|rain|thunder) + is_day into one of
+// AnimatedWeatherIcon's 5 rendered types.
+function toAnimatedIconType(icon, isDay) {
+  if (icon === "sun") return isDay ? "clearSun" : "clearMoon";
+  if (icon === "cloud") return isDay ? "partlyCloudy" : "cloudNight";
+  if (icon === "rain" || icon === "thunder") return isDay ? "thunderSun" : "nightRain";
+  return "cloud";
+}
+
+function uvCategory(uv) {
+  if (uv == null) return "N/A";
+  if (uv < 3) return "Low";
+  if (uv < 6) return "Moderate";
+  if (uv < 8) return "High";
+  if (uv < 11) return "Very High";
+  return "Extreme";
+}
+
+const GRADIENTS_BY_ANIMATED_ICON = {
+  clearSun: { bg: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)", card: "linear-gradient(135deg, rgba(30, 27, 75, 0.75) 0%, rgba(49, 46, 129, 0.65) 100%)" },
+  clearMoon: { bg: "linear-gradient(135deg, #0c1a3e 0%, #1e1b4b 50%, #312e81 100%)", card: "linear-gradient(135deg, rgba(12, 26, 62, 0.8) 0%, rgba(30, 27, 75, 0.65) 100%)" },
+  partlyCloudy: { bg: "linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)", card: "linear-gradient(135deg, rgba(30, 41, 59, 0.75) 0%, rgba(51, 65, 85, 0.65) 100%)" },
+  cloudNight: { bg: "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)", card: "linear-gradient(135deg, rgba(15, 23, 42, 0.75) 0%, rgba(30, 41, 59, 0.65) 100%)" },
+  thunderSun: { bg: "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)", card: "linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.7) 100%)" },
+  nightRain: { bg: "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)", card: "linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.7) 100%)" },
+  cloud: { bg: "linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)", card: "linear-gradient(135deg, rgba(30, 41, 59, 0.75) 0%, rgba(51, 65, 85, 0.65) 100%)" },
+};
+
 // 1. Weather & Risks Website Dashboard Page
 function WeatherPage() {
+  const [location, setLocation] = useState('Mumbai');
   const [loading, setLoading] = useState(false);
-  
-  const weatherStates = [
-    { 
-      location: "San Francisco",
-      country: "California",
-      temp: "63°", 
-      unit: "F",
-      condition: "Partly Cloudy", 
-      heroIcon: "clearSun",
-      windSpeedNum: 10,
-      wind: "10 mph NE", 
-      humidity: 58, 
-      uvIndexNum: 5,
-      uvIndex: "5 (Moderate)",
-      visibility: 10,
-      visibilityStr: "10 mi",
-      sunrise: "06:42 AM",
-      sunset: "07:55 PM",
-      status: "Optimal Atmospheric Conditions",
-      bgGradient: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)",
-      cardBg: "linear-gradient(135deg, rgba(30, 27, 75, 0.75) 0%, rgba(49, 46, 129, 0.65) 100%)",
-      hourly: [
-        { time: "Now", temp: "63°", icon: "clearSun", precip: "0%" }, 
-        { time: "18:00", temp: "64°", icon: "partlyCloudy", precip: "5%" }, 
-        { time: "19:00", temp: "65°", icon: "partlyCloudy", precip: "10%" },
-        { time: "20:00", temp: "64°", icon: "cloud", precip: "15%" },
-        { time: "21:00", temp: "62°", icon: "clearMoon", precip: "0%" },
-        { time: "22:00", temp: "60°", icon: "clearMoon", precip: "0%" }
-      ],
-      humidityData: { labels: ['16:00', '17:00', '18:00', '19:00', '20:00', '21:00'], values: [53, 55, 56, 57, 58, 58] },
-      windData: { labels: ['16:00', '17:00', '18:00', '19:00', '20:00', '21:00'], values: [8, 9, 12, 10, 7, 10] },
-      sunData: { labels: ['04:00', '07:00', '10:00', '13:00', '16:00', '19:00', '22:00'], values: [0, 25, 80, 100, 80, 25, 0] }
-    },
-    { 
-      location: "Minsk",
-      country: "Belarus",
-      temp: "59°", 
-      unit: "F",
-      condition: "Stormy & Heavy Rain", 
-      heroIcon: "thunderSun",
-      windSpeedNum: 32,
-      wind: "32 mph SW", 
-      humidity: 92, 
-      uvIndexNum: 1,
-      uvIndex: "1 (Low)",
-      visibility: 2,
-      visibilityStr: "2 mi",
-      sunrise: "05:15 AM",
-      sunset: "09:10 PM",
-      status: "Severe Weather Warning: High Wind & Storms",
-      bgGradient: "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)",
-      cardBg: "linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.7) 100%)",
-      hourly: [
-        { time: "Now", temp: "59°", icon: "thunderSun", precip: "90%" },
-        { time: "18:00", temp: "58°", icon: "nightRain", precip: "95%" },
-        { time: "19:00", temp: "57°", icon: "nightRain", precip: "80%" },
-        { time: "20:00", temp: "56°", icon: "cloudNight", precip: "40%" },
-        { time: "21:00", temp: "55°", icon: "clearMoon", precip: "20%" },
-        { time: "22:00", temp: "54°", icon: "clearMoon", precip: "10%" }
-      ],
-      humidityData: { labels: ['16:00', '17:00', '18:00', '19:00', '20:00', '21:00'], values: [88, 90, 91, 92, 92, 90] },
-      windData: { labels: ['16:00', '17:00', '18:00', '19:00', '20:00', '21:00'], values: [26, 28, 35, 32, 30, 32] },
-      sunData: { labels: ['04:00', '07:00', '10:00', '13:00', '16:00', '19:00', '22:00'], values: [0, 15, 50, 70, 50, 15, 0] }
+  const [error, setError] = useState(null);
+  const [metrics, setMetrics] = useState(null);
+
+  const fetchWeather = async (city) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${NIMIT_WEATHER_URL}?location=${encodeURIComponent(city)}`);
+      if (!response.ok) {
+        let detail = `Request failed (HTTP ${response.status}).`;
+        try {
+          const body = await response.json();
+          if (body && body.detail) detail = body.detail;
+        } catch {
+          // response body wasn't JSON - keep the generic status message
+        }
+        setError(detail);
+        setMetrics(null);
+        return;
+      }
+      const data = await response.json();
+      setMetrics(data);
+    } catch {
+      setError("Couldn't reach the Nimit backend. Make sure the server is running and try again.");
+      setMetrics(null);
+    } finally {
+      setLoading(false);
     }
-  ];
-  
-  const [metrics, setMetrics] = useState(weatherStates[0]);
+  };
+
+  useEffect(() => {
+    fetchWeather(location);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
+
+  const animatedIconType = metrics ? toAnimatedIconType(metrics.icon, metrics.is_day) : "cloud";
+  const gradients = GRADIENTS_BY_ANIMATED_ICON[animatedIconType];
+  const windSpeedForAnim = Math.max(metrics?.wind_kmh || 1, 1);
 
   const baseSpeedFactor = 300;
-  const animDuration1 = Math.max(3, (baseSpeedFactor / metrics.windSpeedNum) * 0.8).toFixed(1);
-  const animDuration2 = Math.max(4, (baseSpeedFactor / metrics.windSpeedNum) * 1.1).toFixed(1);
-  const animDuration3 = Math.max(2.5, (baseSpeedFactor / metrics.windSpeedNum) * 0.65).toFixed(1);
-  const animDuration4 = Math.max(3.5, (baseSpeedFactor / metrics.windSpeedNum) * 0.95).toFixed(1);
+  const animDuration1 = Math.max(3, (baseSpeedFactor / windSpeedForAnim) * 0.8).toFixed(1);
+  const animDuration2 = Math.max(4, (baseSpeedFactor / windSpeedForAnim) * 1.1).toFixed(1);
+  const animDuration3 = Math.max(2.5, (baseSpeedFactor / windSpeedForAnim) * 0.65).toFixed(1);
+  const animDuration4 = Math.max(3.5, (baseSpeedFactor / windSpeedForAnim) * 0.95).toFixed(1);
 
-  const refreshData = () => {
-    setLoading(true);
-    setTimeout(() => {
-      const currentIndex = weatherStates.findIndex(w => w.location === metrics.location);
-      const nextIndex = (currentIndex + 1) % weatherStates.length;
-      setMetrics(weatherStates[nextIndex]);
-      setLoading(false);
-    }, 300);
-  };
+  const hourly = metrics?.hourly || [];
+  const humidityData = { labels: hourly.map(h => h.time), values: hourly.map(h => h.humidity_pct ?? 0) };
+  const windData = { labels: hourly.map(h => h.time), values: hourly.map(h => h.wind_kmh ?? 0) };
+  const hasHourlyCharts = hourly.length >= 2;
 
   return (
     <div style={{ fontFamily: "'Inter', 'Plus Jakarta Sans', sans-serif", color: "#f8fafc" }}>
@@ -317,9 +323,57 @@ function WeatherPage() {
         .cloud-anim-4 { position: absolute; bottom: 10px; left: 420px; animation: cloudDriftFromMatrix ${animDuration4}s linear infinite; animation-delay: -7s; }
       `}</style>
 
+      {/* Location selector */}
+      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
+        <span style={{ fontSize: "11px", fontWeight: "600", letterSpacing: "0.08em", textTransform: "uppercase", color: "#94a3b8" }}>Location</span>
+        <select
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          style={{
+            fontSize: "13px",
+            fontWeight: "600",
+            color: "#f8fafc",
+            background: "rgba(255,255,255,0.06)",
+            border: "1px solid rgba(255,255,255,0.15)",
+            borderRadius: "10px",
+            padding: "8px 12px",
+            outline: "none",
+            cursor: "pointer",
+          }}
+        >
+          {WEATHER_LOCATIONS.map((loc) => (
+            <option key={loc} value={loc} style={{ background: "#0f172a", color: "#f8fafc" }}>{loc}</option>
+          ))}
+        </select>
+      </div>
+
+      {error && (
+        <div style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: "20px", padding: "20px 24px", marginBottom: "24px", display: "flex", alignItems: "center", gap: "16px" }}>
+          <AlertTriangle size={22} style={{ color: "#ef4444", flexShrink: 0 }} />
+          <p style={{ fontSize: "13px", color: "#fca5a5", margin: 0, fontWeight: "500" }}>{error}</p>
+        </div>
+      )}
+
+      {!metrics && !error && (
+        <div style={{ padding: "60px 0", textAlign: "center", color: "#94a3b8", fontSize: "14px" }}>
+          {loading ? "Loading live weather…" : "No data"}
+        </div>
+      )}
+
+      {metrics && metrics.fallback_used && (
+        <div style={{ background: "rgba(234,179,8,0.08)", border: "1px solid rgba(234,179,8,0.3)", borderRadius: "16px", padding: "12px 20px", marginBottom: "24px", display: "flex", alignItems: "center", gap: "12px" }}>
+          <AlertTriangle size={18} style={{ color: "#eab308", flexShrink: 0 }} />
+          <p style={{ fontSize: "13px", color: "#fde047", margin: 0, fontWeight: "500" }}>
+            Using cached forecast data - live weather temporarily unavailable. Hourly forecast, sunrise/sunset, and some metrics aren't shown in this mode.
+          </p>
+        </div>
+      )}
+
+      {metrics && (
+      <>
       {/* Hero Header Banner */}
       <div style={{
-        background: metrics.bgGradient,
+        background: gradients.bg,
         borderRadius: "28px",
         padding: "40px",
         boxShadow: "0 20px 35px -5px rgba(0,0,0,0.4)",
@@ -344,34 +398,38 @@ function WeatherPage() {
             <span style={{ fontSize: "11px", fontWeight: "600", letterSpacing: "0.08em", textTransform: "uppercase", background: "rgba(56, 189, 248, 0.15)", color: "#38bdf8", padding: "5px 12px", borderRadius: "999px", border: "1px solid rgba(56, 189, 248, 0.3)" }}>Live Telemetry</span>
           </div>
           <h1 style={{ fontFamily: "'Outfit', sans-serif", fontSize: "38px", fontWeight: "700", margin: "0 0 6px 0", letterSpacing: "-0.02em" }}>{metrics.location}</h1>
-          <p style={{ fontSize: "15px", opacity: 0.8, margin: 0, fontWeight: "500" }}>{metrics.country} • {metrics.condition}</p>
+          <p style={{ fontSize: "15px", opacity: 0.8, margin: 0, fontWeight: "500" }}>{metrics.state} • {metrics.condition}</p>
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "24px", position: "relative", zIndex: 2 }}>
           <div style={{ textAlign: "right" }}>
-            <div style={{ fontFamily: "'Helvetica Neue', sans-serif", fontSize: "48px", fontWeight: 500, lineHeight: "1" }}>{metrics.temp}</div>
-            <div style={{ fontSize: "12px", opacity: 0.7, marginTop: "6px", fontWeight: "500" }}>Wind: {metrics.wind}</div>
+            <div style={{ fontFamily: "'Helvetica Neue', sans-serif", fontSize: "48px", fontWeight: 500, lineHeight: "1" }}>{metrics.temp_c}°C</div>
+            <div style={{ fontSize: "12px", opacity: 0.7, marginTop: "6px", fontWeight: "500" }}>Wind: {metrics.wind_kmh != null ? `${metrics.wind_kmh} km/h` : "N/A"}</div>
           </div>
-          <button onClick={refreshData} disabled={loading} style={{ background: "rgba(255,255,255,0.12)", color: "white", border: "1px solid rgba(255,255,255,0.2)", padding: "12px 18px", borderRadius: "14px", fontWeight: "600", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", backdropFilter: "blur(6px)" }}>
-            <RefreshCw size={15} className={loading ? "animate-spin" : ""} /> {loading ? "Switching..." : "Simulate City"}
+          <button onClick={() => fetchWeather(location)} disabled={loading} style={{ background: "rgba(255,255,255,0.12)", color: "white", border: "1px solid rgba(255,255,255,0.2)", padding: "12px 18px", borderRadius: "14px", fontWeight: "600", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", backdropFilter: "blur(6px)" }}>
+            <RefreshCw size={15} className={loading ? "animate-spin" : ""} /> {loading ? "Refreshing..." : "Refresh"}
           </button>
         </div>
       </div>
 
       {/* Hourly Forecast Strip */}
-      <div style={{ background: metrics.cardBg, backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "24px", padding: "24px", marginBottom: "28px", boxShadow: "0 10px 25px rgba(0,0,0,0.3)" }}>
-        <h3 style={{ fontSize: "11px", fontWeight: "600", color: "#38bdf8", textTransform: "uppercase", margin: "0 0 16px 0", letterSpacing: "0.1em" }}>Hourly Forecast & Precipitation Curve</h3>
+      {hourly.length > 0 && (
+      <div style={{ background: gradients.card, backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "24px", padding: "24px", marginBottom: "28px", boxShadow: "0 10px 25px rgba(0,0,0,0.3)" }}>
+        <h3 style={{ fontSize: "11px", fontWeight: "600", color: "#38bdf8", textTransform: "uppercase", margin: "0 0 16px 0", letterSpacing: "0.1em" }}>Hourly Forecast & Precipitation</h3>
         <div style={{ display: "flex", gap: "16px", overflowX: "auto", paddingBottom: "6px" }}>
-          {metrics.hourly.map((hr, idx) => (
+          {hourly.map((hr, idx) => (
             <div key={idx} style={{ flex: "0 0 135px", background: idx === 0 ? "rgba(56, 189, 248, 0.12)" : "rgba(255, 255, 255, 0.03)", border: idx === 0 ? "1px solid rgba(56, 189, 248, 0.35)" : "1px solid rgba(255, 255, 255, 0.06)", borderRadius: "18px", padding: "18px 12px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
               <span style={{ fontSize: "12px", fontWeight: "500", color: "#94a3b8" }}>{hr.time}</span>
-              <AnimatedWeatherIcon type={hr.icon} size={70} />
-              <span style={{ fontFamily: "'Helvetica Neue', sans-serif", fontSize: "17px", fontWeight: 500, color: "#f8fafc" }}>{hr.temp}</span>
-              <span style={{ fontSize: "11px", fontWeight: 500, color: "#38bdf8", background: "rgba(56, 189, 248, 0.15)", padding: "3px 8px", borderRadius: "999px", fontFamily: "'Helvetica Neue', sans-serif" }}>{hr.precip}</span>
+              <AnimatedWeatherIcon type={toAnimatedIconType(hr.icon, hr.is_day)} size={70} />
+              <span style={{ fontFamily: "'Helvetica Neue', sans-serif", fontSize: "17px", fontWeight: 500, color: "#f8fafc" }}>{hr.temp_c != null ? `${hr.temp_c}°` : "--"}</span>
+              {hr.precip_probability != null && (
+                <span style={{ fontSize: "11px", fontWeight: 500, color: "#38bdf8", background: "rgba(56, 189, 248, 0.15)", padding: "3px 8px", borderRadius: "999px", fontFamily: "'Helvetica Neue', sans-serif" }}>{hr.precip_probability}%</span>
+              )}
             </div>
           ))}
         </div>
       </div>
+      )}
 
       {/* Grid Layout Cards */}
       <div style={{ display: "grid", gridTemplateColumns: "2fr 1.2fr", gap: "24px", marginBottom: "28px" }}>
@@ -380,7 +438,7 @@ function WeatherPage() {
         <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
           
           {/* 1. HUMIDITY CARD */}
-          <div style={{ background: metrics.cardBg, backdropFilter: "blur(12px)", border: "1px solid rgba(56, 189, 248, 0.25)", borderRadius: "28px", padding: "28px", display: "flex", flexDirection: "column", justifyContent: "space-between", boxShadow: "0 15px 35px rgba(0, 0, 0, 0.3)" }}>
+          <div style={{ background: gradients.card, backdropFilter: "blur(12px)", border: "1px solid rgba(56, 189, 248, 0.25)", borderRadius: "28px", padding: "28px", display: "flex", flexDirection: "column", justifyContent: "space-between", boxShadow: "0 15px 35px rgba(0, 0, 0, 0.3)" }}>
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -389,18 +447,22 @@ function WeatherPage() {
                   </div>
                   <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "#38bdf8", textTransform: "uppercase", letterSpacing: "0.06em" }}>Humidity</span>
                 </div>
-                <span style={{ fontSize: "1.7rem", fontWeight: 500, fontFamily: "'Helvetica Neue', sans-serif" }}>{metrics.humidity}%</span>
+                <span style={{ fontSize: "1.7rem", fontWeight: 500, fontFamily: "'Helvetica Neue', sans-serif" }}>{metrics.humidity_pct}%</span>
               </div>
-              <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: "0 0 16px 0", lineHeight: "1.5" }}>Moisture saturation is high. Atmospheric stability is maintained.</p>
+              <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: "0 0 16px 0", lineHeight: "1.5" }}>Live moisture reading from Open-Meteo.</p>
             </div>
-            <AnimatedLineChart data={metrics.humidityData} color="#38bdf8" height={100} />
+            {hasHourlyCharts ? (
+              <AnimatedLineChart data={humidityData} color="#38bdf8" height={100} />
+            ) : (
+              <div style={{ fontSize: "0.75rem", color: "#64748b" }}>Hourly trend unavailable in this mode.</div>
+            )}
           </div>
 
           {/* Lower Left Split Row: Visibility & Wind Speed */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
-            
+
             {/* VISIBILITY CARD */}
-            <div style={{ background: metrics.cardBg, backdropFilter: "blur(12px)", border: "1px solid rgba(168, 85, 247, 0.25)", borderRadius: "28px", padding: "24px", display: "flex", flexDirection: "column", justifyContent: "space-between", boxShadow: "0 15px 35px rgba(0, 0, 0, 0.3)" }}>
+            <div style={{ background: gradients.card, backdropFilter: "blur(12px)", border: "1px solid rgba(168, 85, 247, 0.25)", borderRadius: "28px", padding: "24px", display: "flex", flexDirection: "column", justifyContent: "space-between", boxShadow: "0 15px 35px rgba(0, 0, 0, 0.3)" }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
                   <div style={{ width: "34px", height: "34px", borderRadius: "50%", background: "radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, rgba(168, 85, 247, 0) 70%)", display: "flex", alignItems: "center", justifyContent: "center", color: "#c084fc" }}>
@@ -408,13 +470,13 @@ function WeatherPage() {
                   </div>
                   <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#c084fc", textTransform: "uppercase", letterSpacing: "0.06em" }}>Visibility</span>
                 </div>
-                <div style={{ fontSize: "1.8rem", fontWeight: 500, fontFamily: "'Helvetica Neue', sans-serif", marginBottom: "4px" }}>{metrics.visibility} mi</div>
-                <div style={{ fontSize: "0.8rem", color: "#94a3b8" }}>Clear path line of sight.</div>
+                <div style={{ fontSize: "1.8rem", fontWeight: 500, fontFamily: "'Helvetica Neue', sans-serif", marginBottom: "4px" }}>{metrics.visibility_km != null ? `${metrics.visibility_km} km` : "N/A"}</div>
+                <div style={{ fontSize: "0.8rem", color: "#94a3b8" }}>Live reading from Open-Meteo.</div>
               </div>
             </div>
 
             {/* WIND SPEED CARD */}
-            <div style={{ background: metrics.cardBg, backdropFilter: "blur(12px)", border: "1px solid rgba(56, 189, 248, 0.25)", borderRadius: "28px", padding: "24px", display: "flex", flexDirection: "column", justifyContent: "space-between", boxShadow: "0 15px 35px rgba(0, 0, 0, 0.3)" }}>
+            <div style={{ background: gradients.card, backdropFilter: "blur(12px)", border: "1px solid rgba(56, 189, 248, 0.25)", borderRadius: "28px", padding: "24px", display: "flex", flexDirection: "column", justifyContent: "space-between", boxShadow: "0 15px 35px rgba(0, 0, 0, 0.3)" }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
                   <div style={{ width: "34px", height: "34px", borderRadius: "50%", background: "radial-gradient(circle, rgba(56, 189, 248, 0.3) 0%, rgba(56, 189, 248, 0) 70%)", display: "flex", alignItems: "center", justifyContent: "center", color: "#38bdf8" }}>
@@ -422,9 +484,13 @@ function WeatherPage() {
                   </div>
                   <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#38bdf8", textTransform: "uppercase", letterSpacing: "0.06em" }}>Wind Speed</span>
                 </div>
-                <div style={{ fontSize: "1.6rem", fontWeight: 500, fontFamily: "'Helvetica Neue', sans-serif", marginBottom: "4px" }}>{metrics.windSpeedNum} <span style={{ fontSize: "1rem", color: "#94a3b8" }}>mph</span></div>
+                <div style={{ fontSize: "1.6rem", fontWeight: 500, fontFamily: "'Helvetica Neue', sans-serif", marginBottom: "4px" }}>{metrics.wind_kmh != null ? metrics.wind_kmh : "N/A"} <span style={{ fontSize: "1rem", color: "#94a3b8" }}>km/h</span></div>
               </div>
-              <AnimatedBarChart data={metrics.windData} color="#38bdf8" height={65} />
+              {hasHourlyCharts ? (
+                <AnimatedBarChart data={windData} color="#38bdf8" height={65} />
+              ) : (
+                <div style={{ fontSize: "0.75rem", color: "#64748b" }}>Hourly trend unavailable in this mode.</div>
+              )}
             </div>
 
           </div>
@@ -433,9 +499,9 @@ function WeatherPage() {
 
         {/* Right Column Stack */}
         <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-          
+
           {/* UV INDEX CARD */}
-          <div style={{ background: metrics.cardBg, backdropFilter: "blur(12px)", border: "1px solid rgba(251, 191, 36, 0.25)", borderRadius: "28px", padding: "28px", display: "flex", flexDirection: "column", justifyContent: "space-between", boxShadow: "0 15px 35px rgba(0, 0, 0, 0.3)" }}>
+          <div style={{ background: gradients.card, backdropFilter: "blur(12px)", border: "1px solid rgba(251, 191, 36, 0.25)", borderRadius: "28px", padding: "28px", display: "flex", flexDirection: "column", justifyContent: "space-between", boxShadow: "0 15px 35px rgba(0, 0, 0, 0.3)" }}>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
                 <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "radial-gradient(circle, rgba(251, 191, 36, 0.3) 0%, rgba(251, 191, 36, 0) 70%)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fbbf24" }}>
@@ -444,65 +510,64 @@ function WeatherPage() {
                 <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "#fbbf24", textTransform: "uppercase", letterSpacing: "0.06em" }}>UV Index</span>
               </div>
               <div style={{ display: "flex", alignItems: "baseline", gap: "8px", marginBottom: "12px" }}>
-                <span style={{ fontSize: "2.4rem", fontWeight: 500, fontFamily: "'Helvetica Neue', sans-serif" }}>{metrics.uvIndex.split(" ")[0]}</span>
-                <span style={{ fontSize: "1.1rem", fontWeight: 600, color: "#4ade80" }}>{metrics.uvIndex.split("(")[1] || "Low)"}</span>
+                <span style={{ fontSize: "2.4rem", fontWeight: 500, fontFamily: "'Helvetica Neue', sans-serif" }}>{metrics.uv_index != null ? metrics.uv_index : "N/A"}</span>
+                <span style={{ fontSize: "1.1rem", fontWeight: 600, color: "#4ade80" }}>{uvCategory(metrics.uv_index)}</span>
               </div>
-              <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0, lineHeight: "1.5" }}>Sun protection recommended during midday hours.</p>
+              <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0, lineHeight: "1.5" }}>Live UV reading from Open-Meteo.</p>
             </div>
             <div style={{ marginTop: "24px" }}>
               <div style={{ width: "100%", height: "8px", background: "rgba(255, 255, 255, 0.08)", borderRadius: "4px", overflow: "hidden" }}>
-                <div style={{ height: "100%", background: "linear-gradient(135deg, #4ade80 0%, #fbbf24 50%, #f43f5e 100%)", borderRadius: "4px", width: `${Math.min(metrics.uvIndexNum * 12, 100)}%`, transition: "width 1s ease" }}></div>
+                <div style={{ height: "100%", background: "linear-gradient(135deg, #4ade80 0%, #fbbf24 50%, #f43f5e 100%)", borderRadius: "4px", width: `${Math.min((metrics.uv_index || 0) * 9, 100)}%`, transition: "width 1s ease" }}></div>
               </div>
             </div>
           </div>
 
           {/* SUNRISE & SUNSET CARD */}
-          <div style={{ background: metrics.cardBg, backdropFilter: "blur(12px)", border: "1px solid rgba(251, 191, 36, 0.3)", borderRadius: "28px", padding: "28px", display: "flex", flexDirection: "column", justifyContent: "space-between", boxShadow: "0 15px 35px rgba(0, 0, 0, 0.3)", flex: 1 }}>
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
-                <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "radial-gradient(circle, rgba(251, 191, 36, 0.3) 0%, rgba(251, 191, 36, 0) 70%)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fbbf24" }}>
-                  <Sunrise size={18} />
-                </div>
-                <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "#fbbf24", textTransform: "uppercase", letterSpacing: "0.06em" }}>Sunrise & Sunset</span>
+          <div style={{ background: gradients.card, backdropFilter: "blur(12px)", border: "1px solid rgba(251, 191, 36, 0.3)", borderRadius: "28px", padding: "28px", display: "flex", flexDirection: "column", justifyContent: "center", boxShadow: "0 15px 35px rgba(0, 0, 0, 0.3)", flex: 1 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
+              <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "radial-gradient(circle, rgba(251, 191, 36, 0.3) 0%, rgba(251, 191, 36, 0) 70%)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fbbf24" }}>
+                <Sunrise size={18} />
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "16px", background: "rgba(255, 255, 255, 0.04)", padding: "14px 18px", borderRadius: "16px", border: "1px solid rgba(255, 255, 255, 0.06)" }}>
-                <div>
-                  <div style={{ fontSize: "0.75rem", color: "#94a3b8", textTransform: "uppercase", marginBottom: "4px" }}>Sunrise</div>
-                  <div style={{ fontSize: "1.2rem", fontWeight: 500, fontFamily: "'Helvetica Neue', sans-serif", color: "#fef08a" }}>{metrics.sunrise}</div>
-                </div>
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: "0.75rem", color: "#94a3b8", textTransform: "uppercase", marginBottom: "4px" }}>Sunset</div>
-                  <div style={{ fontSize: "1.2rem", fontWeight: 500, fontFamily: "'Helvetica Neue', sans-serif", color: "#fde047" }}>{metrics.sunset}</div>
-                </div>
+              <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "#fbbf24", textTransform: "uppercase", letterSpacing: "0.06em" }}>Sunrise & Sunset</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", background: "rgba(255, 255, 255, 0.04)", padding: "14px 18px", borderRadius: "16px", border: "1px solid rgba(255, 255, 255, 0.06)" }}>
+              <div>
+                <div style={{ fontSize: "0.75rem", color: "#94a3b8", textTransform: "uppercase", marginBottom: "4px" }}>Sunrise</div>
+                <div style={{ fontSize: "1.2rem", fontWeight: 500, fontFamily: "'Helvetica Neue', sans-serif", color: "#fef08a" }}>{metrics.sunrise || "N/A"}</div>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: "0.75rem", color: "#94a3b8", textTransform: "uppercase", marginBottom: "4px" }}>Sunset</div>
+                <div style={{ fontSize: "1.2rem", fontWeight: 500, fontFamily: "'Helvetica Neue', sans-serif", color: "#fde047" }}>{metrics.sunset || "N/A"}</div>
               </div>
             </div>
-            <AnimatedLineChart data={metrics.sunData} color="#fbbf24" height={85} />
           </div>
 
         </div>
 
       </div>
 
-     {/* Alert Banner wrapped cleanly */}
-      <div style={{ marginTop: "24px" }}>
-        {(() => {
-          const isSevere = metrics.windSpeedNum > 25 || metrics.humidity > 85;
-          const alertBg = isSevere ? "rgba(239, 68, 68, 0.1)" : "rgba(34, 197, 94, 0.1)";
-          const alertBorder = isSevere ? "rgba(239, 68, 68, 0.3)" : "rgba(34, 197, 94, 0.3)";
-          const alertColor = isSevere ? "#ef4444" : "#4ade80";
-          const alertText = isSevere ? "#fca5a5" : "#86efac";
-
+     {/* Risk Banners - real risk_level + reasoning from the rule engine */}
+      <div style={{ marginTop: "24px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "16px" }}>
+        {[
+          { title: "Traffic Risk", risk: metrics.traffic_risk },
+          { title: "Health Risk", risk: metrics.health_risk },
+        ].map(({ title, risk }) => {
+          const color = RISK_LEVEL_COLORS[risk.risk_level] || "#94a3b8";
           return (
-            <div style={{ background: alertBg, border: `1px solid ${alertBorder}`, padding: "20px 24px", borderRadius: "20px", display: "flex", alignItems: "center", gap: "16px" }}>
-              <AlertTriangle size={22} style={{ color: alertColor, flexShrink: 0 }} />
+            <div key={title} style={{ background: `${color}1a`, border: `1px solid ${color}4d`, padding: "20px 24px", borderRadius: "20px", display: "flex", alignItems: "flex-start", gap: "16px" }}>
+              <AlertTriangle size={22} style={{ color, flexShrink: 0, marginTop: "2px" }} />
               <div>
-                <h4 style={{ fontSize: "14px", fontWeight: "600", color: alertColor, margin: "0 0 2px 0" }}>Advisory Notice</h4>
-                <p style={{ fontSize: "13px", color: alertText, margin: 0, opacity: 0.9, fontWeight: "500" }}>{metrics.status}</p>
+                <h4 style={{ fontSize: "14px", fontWeight: "600", color, margin: "0 0 4px 0" }}>{title} · {risk.risk_level}</h4>
+                {risk.reasoning.map((line, i) => (
+                  <p key={i} style={{ fontSize: "13px", color: "#cbd5e1", margin: "2px 0", opacity: 0.9, fontWeight: "500" }}>{line}</p>
+                ))}
               </div>
             </div>
           );
-        })()}
+        })}
       </div>
+      </>
+      )}
 
     </div>
   );

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Send, ChevronDown, ChevronUp, Sparkles, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const NIMIT_API_URL = 'http://localhost:8000/ask';
+const NIMIT_API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/ask`;
 
 const LOCATIONS = ['Mumbai', 'Pune', 'Bengaluru', 'Delhi', 'Ludhiana', 'Amritsar'];
 
@@ -95,7 +95,7 @@ export default function ChatPage() {
           id: Date.now() + 1,
           sender: 'bot',
           isError: true,
-          answer: "Couldn't reach the Nimit backend at localhost:8000. Make sure the server is running and try again.",
+          answer: "Couldn't reach the Nimit backend. Make sure the server is running and try again.",
         },
       ]);
     } finally {

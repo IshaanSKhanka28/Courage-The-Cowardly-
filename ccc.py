@@ -1,5 +1,6 @@
 import logging
 import os
+from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -166,6 +167,47 @@ class AskResponse(BaseModel):
     )
 
 
+class HourlyForecastEntry(BaseModel):
+    time: str = Field(..., description="'Now' or a formatted hour label, e.g. '3 PM'")
+    temp_c: Optional[float] = None
+    icon: str = Field(..., description="sun | cloud | rain | thunder")
+    precip_probability: Optional[float] = Field(
+        default=None, description="Percent chance of precipitation for this hour"
+    )
+    humidity_pct: Optional[float] = None
+    wind_kmh: Optional[float] = None
+    uv_index: Optional[float] = None
+    is_day: bool = True
+
+
+class RiskSummary(BaseModel):
+    risk_level: str = Field(..., description="LOW | MODERATE | HIGH | SEVERE")
+    reasoning: List[str]
+
+
+class WeatherSnapshotResponse(BaseModel):
+    location: str
+    state: str
+    condition: str = Field(..., description="Human-readable condition label derived from live data")
+    icon: str = Field(..., description="sun | cloud | rain | thunder")
+    is_day: bool = True
+    temp_c: float
+    wind_kmh: Optional[float] = None
+    humidity_pct: float
+    uv_index: Optional[float] = None
+    visibility_km: Optional[float] = None
+    pressure_hpa: Optional[float] = None
+    sunrise: Optional[str] = Field(default=None, description="e.g. '6:27 AM', None in fallback mode")
+    sunset: Optional[str] = Field(default=None, description="e.g. '6:36 PM', None in fallback mode")
+    hourly: List[HourlyForecastEntry] = Field(default_factory=list)
+    traffic_risk: RiskSummary
+    health_risk: RiskSummary
+    fallback_used: bool = Field(
+        default=False,
+        description="True if live Open-Meteo data was unavailable and a cached profile was used",
+    )
+
+
 # ==========================================
 # 4. HEURISTIC HELPERS
 # ==========================================
@@ -283,6 +325,210 @@ async def get_weather_forecast(location: str) -> Tuple[Dict[str, Any], bool]:
     return loc_info["fallback"], True
 
 
+def _weathercode_to_condition(code: Optional[int]) -> Tuple[str, str]:
+    """Maps a WMO weather code (from Open-Meteo) to (icon, human label).
+    Icon values match the sun/cloud/rain/thunder types WeatherPage renders."""
+    if code is None:
+        return "cloud", "Unknown"
+    if code == 0:
+        return "sun", "Clear Sky"
+    if code in (1, 2):
+        return "cloud", "Partly Cloudy"
+    if code == 3:
+        return "cloud", "Overcast"
+    if code in (45, 48):
+        return "cloud", "Foggy"
+    if code in (51, 53, 55, 56, 57):
+        return "rain", "Drizzle"
+    if code in (61, 63, 65, 66, 67, 80, 81, 82):
+        return "rain", "Rain"
+    if code in (71, 73, 75, 77, 85, 86):
+        return "cloud", "Snow"
+    if code in (95, 96, 99):
+        return "thunder", "Thunderstorm"
+    return "cloud", "Unknown"
+
+
+def _format_hour_label(iso_time: str) -> str:
+    """'2026-09-20T14:00' -> '2 PM'. Avoids platform-specific strftime flags
+    (Linux %-I vs Windows %#I) by formatting manually."""
+    try:
+        dt = datetime.fromisoformat(iso_time)
+    except ValueError:
+        return iso_time
+    hour12 = dt.hour % 12 or 12
+    period = "AM" if dt.hour < 12 else "PM"
+    return f"{hour12} {period}"
+
+
+def _format_clock_time(iso_time: str) -> str:
+    """'2026-09-20T06:27' -> '6:27 AM'."""
+    try:
+        dt = datetime.fromisoformat(iso_time)
+    except ValueError:
+        return iso_time
+    hour12 = dt.hour % 12 or 12
+    period = "AM" if dt.hour < 12 else "PM"
+    return f"{hour12}:{dt.minute:02d} {period}"
+
+
+async def get_weather_snapshot(location: str) -> Tuple[Dict[str, Any], bool]:
+    """Fetches a full current-conditions + hourly snapshot from Open-Meteo for the
+    /weather endpoint (current temp, wind, humidity, UV, visibility, pressure,
+    condition, next hours). Deliberately separate from get_weather_forecast (used
+    by /ask) so that already-tested flow is untouched by this.
+
+    On failure, falls back to the same cached per-city profile /ask already uses
+    for temp/humidity/precip - but does NOT fabricate wind/UV/visibility/pressure
+    or an hourly forecast for fields we have no real cached value for. Those come
+    back as None/empty and fallback_used=True, so the frontend can say so honestly
+    instead of inventing numbers.
+    """
+    city_key = location.lower().strip()
+    loc_info = LOCATION_INFO.get(city_key)
+
+    if not loc_info:
+        supported = ", ".join(sorted(info["city"] for info in LOCATION_INFO.values()))
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported location '{location}'. Supported locations: {supported}",
+        )
+
+    url = "https://api.open-meteo.com/v1/forecast"
+    params = {
+        "latitude": loc_info["lat"],
+        "longitude": loc_info["lon"],
+        "hourly": (
+            "temperature_2m,relative_humidity_2m,precipitation,"
+            "precipitation_probability,windspeed_10m,surface_pressure,"
+            "visibility,uv_index,weathercode,is_day"
+        ),
+        "daily": "sunrise,sunset",
+        "current_weather": "true",
+        "forecast_days": 1,
+        "timezone": "auto",
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            response = await client.get(url, params=params)
+            if response.status_code == 200:
+                data = response.json()
+                hourly = data.get("hourly", {})
+                times = hourly.get("time", [])
+                temps = hourly.get("temperature_2m", [])
+                humidity = hourly.get("relative_humidity_2m", [])
+                precip = hourly.get("precipitation", [])
+                precip_prob = hourly.get("precipitation_probability", [])
+                wind = hourly.get("windspeed_10m", [])
+                pressure = hourly.get("surface_pressure", [])
+                visibility = hourly.get("visibility", [])
+                uv = hourly.get("uv_index", [])
+                codes = hourly.get("weathercode", [])
+                is_day_series = hourly.get("is_day", [])
+
+                current = data.get("current_weather", {})
+                current_time = current.get("time", "")
+                current_hour_key = current_time[:13] + ":00" if len(current_time) >= 13 else None
+                now_idx = times.index(current_hour_key) if current_hour_key in times else 0
+
+                current_code = current.get("weathercode")
+                if current_code is None and now_idx < len(codes):
+                    current_code = codes[now_idx]
+                icon, condition = _weathercode_to_condition(current_code)
+
+                current_is_day = current.get("is_day")
+                is_day_now = bool(current_is_day) if current_is_day is not None else (
+                    bool(is_day_series[now_idx]) if now_idx < len(is_day_series) else True
+                )
+
+                hourly_entries = []
+                for i in range(now_idx, min(now_idx + 7, len(times))):
+                    h_icon, _ = _weathercode_to_condition(codes[i] if i < len(codes) else None)
+                    hourly_entries.append({
+                        "time": "Now" if i == now_idx else _format_hour_label(times[i]),
+                        "temp_c": round(temps[i], 1) if i < len(temps) and temps[i] is not None else None,
+                        "icon": h_icon,
+                        "precip_probability": precip_prob[i] if i < len(precip_prob) else None,
+                        "humidity_pct": round(humidity[i], 1) if i < len(humidity) and humidity[i] is not None else None,
+                        "wind_kmh": round(wind[i], 1) if i < len(wind) and wind[i] is not None else None,
+                        "uv_index": round(uv[i], 1) if i < len(uv) and uv[i] is not None else None,
+                        "is_day": bool(is_day_series[i]) if i < len(is_day_series) else True,
+                    })
+
+                total_rain = sum(value or 0 for value in precip)
+                max_temp = max(temps) if temps else loc_info["fallback"]["max_temperature_c"]
+                avg_humidity = (
+                    sum(value or 0 for value in humidity) / len(humidity)
+                    if humidity
+                    else loc_info["fallback"]["avg_relative_humidity"]
+                )
+
+                daily = data.get("daily", {})
+                sunrise_list = daily.get("sunrise", [])
+                sunset_list = daily.get("sunset", [])
+
+                snapshot = {
+                    "location": loc_info["city"],
+                    "state": loc_info["state"],
+                    "condition": condition,
+                    "icon": icon,
+                    "is_day": is_day_now,
+                    "temp_c": round(
+                        current.get("temperature", temps[now_idx] if now_idx < len(temps) else max_temp), 1
+                    ),
+                    "wind_kmh": round(current.get("windspeed", wind[now_idx] if now_idx < len(wind) else 0) or 0, 1),
+                    "humidity_pct": round(humidity[now_idx], 1) if now_idx < len(humidity) else round(avg_humidity, 1),
+                    "uv_index": round(uv[now_idx], 1) if now_idx < len(uv) and uv[now_idx] is not None else None,
+                    "visibility_km": (
+                        round(visibility[now_idx] / 1000, 1)
+                        if now_idx < len(visibility) and visibility[now_idx] is not None
+                        else None
+                    ),
+                    "pressure_hpa": round(pressure[now_idx], 1) if now_idx < len(pressure) and pressure[now_idx] is not None else None,
+                    "sunrise": _format_clock_time(sunrise_list[0]) if sunrise_list else None,
+                    "sunset": _format_clock_time(sunset_list[0]) if sunset_list else None,
+                    "hourly": hourly_entries,
+                    "total_precipitation_mm": round(total_rain, 1),
+                    "max_temperature_c": round(max_temp, 1),
+                    "avg_relative_humidity": round(avg_humidity, 1),
+                }
+                return snapshot, False
+
+            logger.warning("Open-Meteo returned HTTP %s for %s", response.status_code, location)
+    except Exception as exc:
+        logger.warning("Open-Meteo full snapshot call failed for %s: %s. Using fallback.", location, exc)
+
+    fb = loc_info["fallback"]
+    if fb["total_precipitation_mm"] > 20:
+        fallback_icon, fallback_condition = "rain", "Rain (cached estimate)"
+    elif fb["total_precipitation_mm"] > 0:
+        fallback_icon, fallback_condition = "cloud", "Cloudy (cached estimate)"
+    else:
+        fallback_icon, fallback_condition = "sun", "Clear (cached estimate)"
+
+    snapshot = {
+        "location": fb["location"],
+        "state": loc_info["state"],
+        "condition": fallback_condition,
+        "icon": fallback_icon,
+        "is_day": True,
+        "temp_c": fb["max_temperature_c"],
+        "wind_kmh": None,
+        "humidity_pct": fb["avg_relative_humidity"],
+        "uv_index": None,
+        "visibility_km": None,
+        "pressure_hpa": None,
+        "sunrise": None,
+        "sunset": None,
+        "hourly": [],
+        "total_precipitation_mm": fb["total_precipitation_mm"],
+        "max_temperature_c": fb["max_temperature_c"],
+        "avg_relative_humidity": fb["avg_relative_humidity"],
+    }
+    return snapshot, True
+
+
 # ==========================================
 # 6. FASTAPI APPLICATION & CORS
 # ==========================================
@@ -314,6 +560,59 @@ def health_check():
         "service": "Nimit Backend API",
         "version": "1.0.0",
     }
+
+
+# ==========================================
+# 7b. WEATHER SNAPSHOT ENDPOINT
+# ==========================================
+
+@app.get("/weather", response_model=WeatherSnapshotResponse)
+async def get_weather(location: str):
+    """Live current-conditions + hourly snapshot for one of the project's cities,
+    pulled from Open-Meteo, plus real traffic/health risk from the rule engine
+    (generic defaults: no known flood zone, no children specified - this endpoint
+    isn't query-specific like /ask, so it reports the baseline risk for the
+    location's current weather)."""
+    if not location or not location.strip():
+        raise HTTPException(status_code=400, detail="Location is required.")
+
+    snapshot, fallback_used = await get_weather_snapshot(location)
+
+    traffic_rule = evaluate_waterlogging_risk(
+        rainfall_mm=snapshot["total_precipitation_mm"],
+        is_known_flood_zone=False,
+    )
+    health_rule = evaluate_outdoor_activity_risk(
+        temp_c=snapshot["max_temperature_c"],
+        humidity_pct=snapshot["avg_relative_humidity"],
+        involves_children=False,
+    )
+
+    return WeatherSnapshotResponse(
+        location=snapshot["location"],
+        state=snapshot["state"],
+        condition=snapshot["condition"],
+        icon=snapshot["icon"],
+        is_day=snapshot["is_day"],
+        temp_c=snapshot["temp_c"],
+        wind_kmh=snapshot["wind_kmh"],
+        humidity_pct=snapshot["humidity_pct"],
+        uv_index=snapshot["uv_index"],
+        visibility_km=snapshot["visibility_km"],
+        pressure_hpa=snapshot["pressure_hpa"],
+        sunrise=snapshot["sunrise"],
+        sunset=snapshot["sunset"],
+        hourly=snapshot["hourly"],
+        traffic_risk=RiskSummary(
+            risk_level=traffic_rule.risk_level.value.upper(),
+            reasoning=traffic_rule.reasoning,
+        ),
+        health_risk=RiskSummary(
+            risk_level=health_rule.risk_level.value.upper(),
+            reasoning=health_rule.reasoning,
+        ),
+        fallback_used=fallback_used,
+    )
 
 
 # ==========================================
@@ -463,9 +762,13 @@ async def ask_nimit(payload: AskRequest):
 if __name__ == "__main__":
     import uvicorn
 
+    port = int(os.environ.get("PORT", 8000))
+    print(f"[startup] Resolved port: {port}", flush=True)
+    print(f"[startup] GEMINI_API_KEY present: {bool(os.environ.get('GEMINI_API_KEY'))}", flush=True)
+    print(f"[startup] ANTHROPIC_API_KEY present: {bool(os.environ.get('ANTHROPIC_API_KEY'))}", flush=True)
     uvicorn.run(
         "ccc:app",
         host="0.0.0.0",
-        port=8000,
+        port=port,
         reload=True,
     )
