@@ -156,3 +156,51 @@ def test_health_query_evaluates_heat_risk(client_app, monkeypatch):
     # Rule trace should show heat index and children escalation
     assert any("Heat index computed" in r for r in data["reasoning_trace"])
     assert any("Activity involves children" in r for r in data["reasoning_trace"])
+
+
+def test_agriculture_ludhiana_returns_risk(client_app, monkeypatch):
+    """Valid agriculture query for Ludhiana (Punjab) returns a real risk_level."""
+    async def mock_weather_ludhiana(location):
+        return {
+            "location": "Ludhiana",
+            "total_precipitation_mm": 30.0,
+            "max_temperature_c": 35.0,
+            "avg_relative_humidity": 60.0,
+        }, False
+
+    monkeypatch.setattr(ccc, "get_weather_forecast", mock_weather_ludhiana)
+
+    response = client_app.post(
+        "/ask",
+        json={
+            "query": "Unseasonal rain during grain filling in Ludhiana",
+            "location": "Ludhiana",
+            "sector": "agriculture",
+        },
+    )
+    assert response.status_code == 200, f"Expected 200 but got {response.status_code}: {response.json()}"
+    data = response.json()
+
+    # Risk level should come from evaluate_crop_risk: 30mm moderate + unseasonal=True -> escalate MODERATE->HIGH
+    assert data["risk_level"] == "HIGH", f"Expected HIGH risk but got {data['risk_level']}"
+    # Should mention unseasonal escalation in reasoning
+    assert any("escalat" in r.lower() for r in data["reasoning_trace"])
+    # Should have DERIVED source tag origin in reasoning
+    assert any("IMD" in r for r in data["reasoning_trace"])
+
+
+def test_agriculture_mumbai_returns_400(client_app):
+    """Agriculture query for Mumbai (outside Punjab) returns honest 400 error."""
+    response = client_app.post(
+        "/ask",
+        json={
+            "query": "Will it rain during wheat harvest in Mumbai?",
+            "location": "Mumbai",
+            "sector": "agriculture",
+        },
+    )
+    assert response.status_code == 400, f"Expected 400 but got {response.status_code}: {response.json()}"
+    detail = response.json()["detail"]
+    assert "agriculture" in detail.lower(), f"Expected agriculture mention in error detail: {detail}"
+    assert "Punjab" in detail, f"Expected Punjab mention in error detail: {detail}"
+    assert "Ludhiana" in detail or "Amritsar" in detail, f"Expected Ludhiana/Amritsar mention in error detail: {detail}"
