@@ -785,11 +785,39 @@ async def ask_nimit(payload: AskRequest):
                     opening = "You can probably go ahead, but keep an eye on conditions."
                     advice = "Give yourself a little extra time and recheck the local update before leaving."
 
-                reasoning = " ".join(r_res.reasoning[:2])
+                values = r_res.raw_values
+                if "crop" in query or "wheat" in query or "harvest" in query:
+                    rainfall = values.get("rainfall_mm")
+                    crop_stage = values.get("crop_stage", "grain-filling")
+                    explanation = (
+                        f"The forecast has about {rainfall:g}mm of rain, and I am assuming the wheat is "
+                        f"at the {crop_stage.replace('_', '-')} stage based on the regional calendar."
+                    )
+                    advice = (
+                        "Clear the field drainage and check for lodging or leaf disease after the rain. "
+                        "If that crop stage assumption is wrong, the risk could be different."
+                    )
+                elif "child" in query or "kid" in query or "sports" in query or "heat" in query:
+                    temperature = values.get("temp_c")
+                    heat_index = values.get("heat_index_c")
+                    explanation = (
+                        f"It is around {temperature:g}C, but the heat index feels closer to {heat_index:.1f}C, "
+                        "which is a poor combination for children's outdoor exertion."
+                    )
+                else:
+                    rainfall = values.get("rainfall_mm")
+                    if values.get("is_known_flood_zone"):
+                        explanation = (
+                            f"Mumbai is expecting around {rainfall:g}mm of rain, and this is a known "
+                            "flood-prone spot when rainfall gets into this range."
+                        )
+                    else:
+                        explanation = f"The forecast is for around {rainfall:g}mm of rain in the area."
+
                 sources_json = _json.dumps({"sources_cited": srcs[:2]})
                 fake_text = (
-                    f"{opening} {reasoning} {advice} "
-                    f"The guidance from {primary_src} is relevant here.\n\n"
+                    f"{opening} {explanation} {advice} "
+                    f"That lines up with the local evidence from {primary_src}.\n\n"
                     f"```json\n{sources_json}\n```"
                 )
                 client_mock = FakeAnthropicClient(response_text=fake_text)
