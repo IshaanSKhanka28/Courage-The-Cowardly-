@@ -13,6 +13,7 @@ from pydantic import BaseModel, Field
 from rag.orchestrator import answer_query
 from rules.heat_risk import evaluate_outdoor_activity_risk
 from rules.rain_risk import evaluate_waterlogging_risk
+from rules.crop_risk import evaluate_crop_risk
 from synthesis.synthesize import synthesize_answer
 
 load_dotenv()
@@ -355,6 +356,28 @@ async def ask_nimit(payload: AskRequest):
             temp_c=weather_data["max_temperature_c"],
             humidity_pct=weather_data["avg_relative_humidity"],
             involves_children=involves_children,
+        )
+    elif sector == Sector.AGRICULTURE:
+        # Agriculture is currently only supported for Punjab (Ludhiana, Amritsar)
+        loc_info = LOCATION_INFO.get(payload.location.lower().strip())
+        if not loc_info or loc_info["state"] != "Punjab":
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    f"Unsupported location '{payload.location}' for agriculture sector. "
+                    "Agriculture coverage is currently limited to Punjab (Ludhiana, Amritsar)."
+                ),
+            )
+        # Heuristic: is_unseasonal = True if query contains unseasonal markers
+        query_lower = (payload.query or "").lower()
+        is_unseasonal = any(
+            word in query_lower
+            for word in ("unseasonal", "unusual", "unexpected")
+        )
+        rule_result = evaluate_crop_risk(
+            rainfall_mm=weather_data["total_precipitation_mm"],
+            crop_stage="grain_filling",  # hackathon simplification; not a real crop-calendar lookup
+            is_unseasonal=is_unseasonal,
         )
     else:
         # General / extensible fallback (e.g. agriculture)
