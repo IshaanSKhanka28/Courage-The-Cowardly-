@@ -563,6 +563,34 @@ def health_check():
 
 
 # ==========================================
+# 7a. TEMP DIAGNOSTIC: raw Open-Meteo reachability check
+# ==========================================
+# Exists only to diagnose why the deployed backend's Open-Meteo calls are
+# falling back on Railway without needing dashboard/log access - returns the
+# actual exception type/message instead of swallowing it. Safe to delete once
+# the underlying issue is understood and fixed.
+
+@app.get("/debug/network-check")
+async def debug_network_check():
+    result: Dict[str, Any] = {"target": "https://api.open-meteo.com/v1/forecast"}
+    try:
+        async with httpx.AsyncClient(timeout=8.0) as client:
+            response = await client.get(
+                "https://api.open-meteo.com/v1/forecast",
+                params={"latitude": 19.076, "longitude": 72.8777, "current_weather": "true"},
+            )
+            result["success"] = True
+            result["status_code"] = response.status_code
+            result["body_preview"] = response.text[:200]
+    except Exception as exc:
+        result["success"] = False
+        result["exception_type"] = type(exc).__name__
+        result["exception_message"] = str(exc)
+        result["exception_repr"] = repr(exc)
+    return result
+
+
+# ==========================================
 # 7b. WEATHER SNAPSHOT ENDPOINT
 # ==========================================
 
